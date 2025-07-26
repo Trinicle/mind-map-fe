@@ -1,15 +1,37 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Auth } from '../../auth/auth';
-import { Router } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { LoginRequest } from '../../auth/auth-model';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login implements OnInit {
-  private readonly router = inject(Router);
+export class Login {
+  private readonly authService = inject(Auth);
+  protected readonly isLoading = signal(false);
 
-  ngOnInit(): void {}
+  protected readonly form = new FormGroup({
+    email: new FormControl(''),
+    password: new FormControl(''),
+  });
+
+  onSubmit() {
+    const { email, password } = this.form.value;
+    if (!email || !password) {
+      return;
+    }
+    const request: LoginRequest = { email, password };
+    this.isLoading.set(true);
+    this.authService.login(request).subscribe({
+      complete: () => {
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+      },
+    });
+  }
 }

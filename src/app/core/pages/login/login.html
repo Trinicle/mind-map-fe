@@ -1,1 +1,53 @@
-<p>login works!</p>
+<div class="bg-base-200">
+  <div class="container mx-auto h-screen flex items-center justify-center">
+    <div class="card card-body card-border bg-base-100 max-w-xl">
+      <div class="flex flex-col gap-2 items-center mb-4 card-title">
+        <h1 class="text-5xl font-bold">Login</h1>
+        <p class="text-lg">
+          Login to your account to get started with Mind Map.
+        </p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="w-full flex flex-col gap-4">
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">Email</legend>
+            <input
+              name="email"
+              type="email"
+              formControlName="email"
+              class="input input-lg w-full"
+              required
+              email
+            />
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">Password</legend>
+            <input
+              name="password"
+              type="password"
+              formControlName="password"
+              class="input input-lg w-full"
+              minlength="8"
+              autocomplete="current-password"
+              required
+            />
+          </fieldset>
+
+          <div class="card-actions">
+            <button
+              type="submit"
+              class="btn btn-lg btn-primary w-full"
+              [disabled]="form.invalid || isLoading()"
+            >
+              @if (isLoading()) {
+              <span class="loading loading-spinner loading-md"></span>
+              } @else { Login }
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
