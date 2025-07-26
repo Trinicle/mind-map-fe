@@ -1,0 +1,39 @@
+@if (router.url === '/welcome') {
+<nav class="bg-base-300 navbar fixed top-0 left-0 right-0 z-50">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center">
+      <div>
+        <a routerLink="/" class="flex items-center gap-2">
+          <span class="text-3xl font-bold">MindMap</span>
+        </a>
+      </div>
+
+      <div class="ml-auto right-0">
+        <div class="flex items-center gap-2">
+          <a routerLink="/login" class="btn btn-lg btn-ghost">Login</a>
+          <a routerLink="/signup" class="btn btn-lg btn-primary">Sign Up</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+} @else if (router.url === '/login' || router.url === '/signup') { } @else {
+<nav class="bg-base-300 navbar fixed top-0 left-0 right-0 z-50">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center">
+      <div>
+        <a routerLink="/" class="flex items-center gap-2">
+          <span class="text-3xl font-bold">MindMap</span>
+        </a>
+      </div>
+
+      <div class="ml-auto right-0">
+        <div class="flex items-center gap-2">
+          <a routerLink="/login" class="btn btn-lg btn-ghost">Login</a>
+          <a routerLink="/signup" class="btn btn-lg btn-primary">Sign Up</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+}

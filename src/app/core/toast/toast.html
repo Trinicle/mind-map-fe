@@ -1,0 +1,13 @@
+<div
+  class="toast toast-top toast-end transition-all duration-300"
+  [class.hidden]="!store.isVisible()"
+>
+  <div
+    class="alert alert-info bg-error border-error rounded-sm min-w-32 max-w-96"
+  >
+    <span class="text-lg">{{ store.message() }}</span>
+    <button class="ml-auto" (click)="close()">
+      <ng-icon name="heroXMark" class="text-2xl" strokeWidth="2" />
+    </button>
+  </div>
+</div>

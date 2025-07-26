@@ -1,0 +1,72 @@
+<div class="hero min-h-screen bg-base-200">
+  <div class="hero-content text-center">
+    <div class="max-w-3xl">
+      <h1 class="text-5xl font-bold mb-8">
+        Transform Meeting Transcripts into Actionable Insights
+      </h1>
+      <p class="text-xl mb-8">
+        MindMap helps you turn messy meeting transcripts into structured,
+        interactive topic trees powered by AI. Discover insights, track action
+        items, and never lose important meeting details again.
+      </p>
+      <div class="flex gap-4 justify-center">
+        <button routerLink="/signup" class="btn btn-primary btn-xl">
+          Get Started
+        </button>
+        <button (click)="scrollToFeatures()" class="btn btn-ghost btn-xl">
+          Learn More
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-20 bg-base-100">
+  <div class="container mx-auto px-4">
+    <h2 class="text-4xl font-bold text-center mb-16">Why Choose MindMap?</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+      @for (feature of features; track feature.title) {
+      <div
+        class="card bg-base-200 shadow-xl hover:shadow-2xl transition-shadow"
+      >
+        <div class="card-body">
+          <h3 class="card-title text-2xl mb-4">
+            {{ feature.title }}
+            <ng-icon
+              class="text-4xl ml-auto right-0"
+              [name]="feature.icon"
+            ></ng-icon>
+          </h3>
+          <p class="text-lg opacity-90">{{ feature.description }}</p>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+<div class="bg-primary text-primary-content py-16">
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-3xl font-bold mb-6">Ready to Transform Your Meetings?</h2>
+    <p class="text-xl mb-8 max-w-2xl mx-auto">
+      Join thousands of professionals who are already using MindMap to get more
+      value from their meetings.
+    </p>
+    <button routerLink="/signup" class="btn btn-secondary btn-xl">
+      Sign Up
+    </button>
+  </div>
+</div>
+
+<div class="py-20 bg-base-100">
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-4xl font-bold mb-16">How It Works</h2>
+    <div class="steps steps-vertical lg:steps-horizontal">
+      <div class="step step-primary">Upload Transcript</div>
+      <div class="step step-primary">AI Analysis</div>
+      <div class="step step-primary">Interactive Mind Map</div>
+      <div class="step step-primary">Extract Insights</div>
+    </div>
+  </div>
+</div>
