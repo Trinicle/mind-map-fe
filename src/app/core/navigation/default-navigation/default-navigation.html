@@ -14,6 +14,7 @@
             [routerLink]="route.path"
             [class.btn-active]="route.isActive()"
             class="btn btn-lg btn-ghost"
+            (click)="route.onClick()"
             >{{ route.label }}</a
           >
           }

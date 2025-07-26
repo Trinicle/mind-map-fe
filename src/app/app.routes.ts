@@ -1,13 +1,14 @@
 import { Routes } from '@angular/router';
-import { Login } from './core/pages/login/login';
+import { Signin } from './core/pages/signin/signin';
 import { Welcome } from './modules/welcome/welcome';
 import { Signup } from './core/pages/signup/signup';
 import { Dashboard } from './modules/dashboard/dashboard';
+import { authGuard } from './core/auth/auth-guard';
 
 export const routes: Routes = [
   {
-    path: 'login',
-    component: Login,
+    path: 'signin',
+    component: Signin,
   },
   {
     path: 'signup',
@@ -16,6 +17,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: Dashboard,
+    canActivate: [authGuard],
   },
   {
     path: 'welcome',

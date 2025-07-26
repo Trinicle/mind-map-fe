@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Auth } from '../../auth/auth';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LoginRequest } from '../../auth/auth-model';
@@ -6,10 +6,10 @@ import { LoginRequest } from '../../auth/auth-model';
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule],
-  templateUrl: './login.html',
-  styleUrl: './login.css',
+  templateUrl: './signin.html',
+  styleUrl: './signin.css',
 })
-export class Login {
+export class Signin {
   private readonly authService = inject(Auth);
   protected readonly isLoading = signal(false);
 

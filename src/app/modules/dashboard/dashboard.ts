@@ -1,11 +1,26 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import { DashboardCardCollectionStore } from './dashboard-card-store';
+import { DashboardCardSkeleton } from './dashboard-card-skeleton/dashboard-card-skeleton';
+import { DashboardCard } from './dashboard-card/dashboard-card';
+import { DashboardCardEmpty } from './dashboard-card-empty/dashboard-card-empty';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [
+    DashboardCardSkeleton,
+    DashboardCard,
+    DashboardCardEmpty,
+    CommonModule,
+  ],
   providers: [DashboardCardCollectionStore],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard {}
+export class Dashboard implements OnInit {
+  protected readonly store = inject(DashboardCardCollectionStore);
+
+  ngOnInit(): void {
+    this.store.setIsLoading(true);
+  }
+}

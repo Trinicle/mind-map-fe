@@ -1,3 +1,54 @@
-<div class="h-screen bg-base-200 pt-16">
-  <div class="container mx-auto"></div>
+<div class="h-screen bg-base-200 pt-16 overflow-y-auto">
+  <div class="container mx-auto mt-12">
+    <div class="grid grid-cols-[300px_1fr] gap-8">
+      <div>
+        <div class="mb-16">
+          <h1 class="text-4xl font-bold">Dashboard</h1>
+          <h3 class="text-lg text-gray-500">Welcome back, Hunter Freeland!</h3>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold">Filters</h2>
+          <form>
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Title</legend>
+              <input name="title" type="text" class="input input-lg w-full" />
+            </fieldset>
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Tags</legend>
+              <select class="select select-lg max-h-64">
+                <option>Select a tag</option>
+                <option>Tag 1</option>
+                <option>Tag 2</option>
+                <option>Tag 3</option>
+              </select>
+            </fieldset>
+            <fieldset class="fieldset">
+              <legend class="fieldset-legend">Date</legend>
+              <input name="date" type="date" class="input input-lg w-full" />
+            </fieldset>
+          </form>
+        </div>
+      </div>
+      <div class="grid grid-cols-5 gap-8">
+        @if (store.isLoading()) {
+        <app-dashboard-card-skeleton />
+        <app-dashboard-card-skeleton />
+        <app-dashboard-card-skeleton />
+        <app-dashboard-card-skeleton />
+        <app-dashboard-card-skeleton />
+        <app-dashboard-card-skeleton />
+        <app-dashboard-card-skeleton />
+        <app-dashboard-card-skeleton />
+        <app-dashboard-card-skeleton />
+        <app-dashboard-card-skeleton />
+        <app-dashboard-card-skeleton />
+        <app-dashboard-card-skeleton />
+        } @else { @for (card of store.cards(); track card.id) {
+        <app-dashboard-card [card]="card" />
+        }
+        <app-dashboard-card-empty />
+        }
+      </div>
+    </div>
+  </div>
 </div>

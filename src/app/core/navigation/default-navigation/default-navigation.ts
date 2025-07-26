@@ -1,6 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { Auth } from '../../auth/auth';
+
+interface NavigationRoute {
+  label: string;
+  path: string;
+  isActive: () => boolean;
+  onClick: () => void;
+}
 
 @Component({
   selector: 'app-default-navigation',
@@ -10,17 +18,20 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class DefaultNavigation {
   protected readonly router = inject(Router);
+  protected readonly auth = inject(Auth);
 
-  routes = [
+  routes: NavigationRoute[] = [
     {
       label: 'Dashboard',
       path: '/dashboard',
       isActive: () => this.router.url === '/dashboard',
+      onClick: () => this.router.navigate(['/dashboard']),
     },
     {
-      label: 'Logout',
-      path: '/logout',
-      isActive: () => this.router.url === '/logout',
+      label: 'Sign Out',
+      path: '/welcome',
+      isActive: () => false,
+      onClick: () => this.auth.signOut().subscribe(),
     },
   ];
 }
