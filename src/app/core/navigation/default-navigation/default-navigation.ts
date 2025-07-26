@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Auth } from '../../auth/auth';
+import { Account } from './account/account';
 
 interface NavigationRoute {
   label: string;
@@ -12,7 +13,7 @@ interface NavigationRoute {
 
 @Component({
   selector: 'app-default-navigation',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Account],
   templateUrl: './default-navigation.html',
   styleUrl: './default-navigation.css',
 })
@@ -26,12 +27,6 @@ export class DefaultNavigation {
       path: '/dashboard',
       isActive: () => this.router.url === '/dashboard',
       onClick: () => this.router.navigate(['/dashboard']),
-    },
-    {
-      label: 'Sign Out',
-      path: '/welcome',
-      isActive: () => false,
-      onClick: () => this.auth.signOut().subscribe(),
     },
   ];
 }

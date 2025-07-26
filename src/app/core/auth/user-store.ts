@@ -1,19 +1,23 @@
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 
+const STORAGE_KEY = 'user_session';
+
 export interface UserModel {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
+  accessToken?: string;
 }
 
-export interface UserState {
+interface UserState {
   user: UserModel | null;
   isLoading: boolean;
 }
 
-export const initialState: UserState = {
-  user: null,
+const storedUser = localStorage.getItem(STORAGE_KEY);
+const initialState: UserState = {
+  user: storedUser ? JSON.parse(storedUser) : null,
   isLoading: false,
 };
 
@@ -22,13 +26,24 @@ export const UserStore = signalStore(
   withState(initialState),
   withMethods((store) => ({
     setUser(user: UserModel) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
       patchState(store, { user });
     },
     clearUser() {
+      localStorage.removeItem(STORAGE_KEY);
       patchState(store, { user: null });
     },
     setIsLoading(isLoading: boolean) {
       patchState(store, { isLoading });
+    },
+    getAccessToken() {
+      return store.user()?.accessToken;
+    },
+    getFirstName() {
+      return store.user()?.firstName;
+    },
+    getLastName() {
+      return store.user()?.lastName;
     },
   }))
 );

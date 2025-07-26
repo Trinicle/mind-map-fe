@@ -16,6 +16,11 @@ interface AuthResponse {
   };
 }
 
+interface SessionResponse {
+  message: string;
+  data: Session | null;
+}
+
 interface AuthError {
   message: string;
   code: string;
@@ -77,6 +82,7 @@ export class Auth {
       email: metadata.email,
       firstName: metadata.firstName,
       lastName: metadata.lastName,
+      accessToken: session.access_token,
     };
 
     this.userStore.setUser(userModel);
@@ -98,6 +104,33 @@ export class Auth {
       tap(() => {
         this.router.navigate(['/welcome']);
         this.userStore.clearUser();
+        this.userStore.setIsLoading(false);
+      })
+    );
+  }
+
+  public checkSession() {
+    this.userStore.setIsLoading(true);
+    return this.http.get<SessionResponse>(getApiUrl('/auth/session')).pipe(
+      catchError((error) => {
+        this.userStore.clearUser();
+        this.userStore.setIsLoading(false);
+        return throwError(() => error);
+      }),
+      map((response) => {
+        const data = response.data;
+        if (!data) {
+          this.userStore.clearUser();
+          return false;
+        }
+        return true;
+      }),
+      tap((isAuthenticated) => {
+        if (isAuthenticated) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.router.navigate(['/signin']);
+        }
         this.userStore.setIsLoading(false);
       })
     );

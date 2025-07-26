@@ -1,0 +1,33 @@
+<div class="dropdown dropdown-end">
+  <a tabindex="0" class="btn btn-lg btn-ghost" popovertarget="account">
+    Account
+  </a>
+  <ul
+    tabindex="0"
+    class="dropdown-content menu bg-base-100 rounded-box z-1 w-72 shadow-sm text-[16px] mt-2"
+  >
+    <li class="py-1.5 px-3 font-bold text-[20px]">
+      {{ userStore.getFirstName() }} {{ userStore.getLastName() }}
+    </li>
+    <div class="divider m-0"></div>
+    <li>
+      <a>
+        <ng-icon name="tdesignUser1Filled" size="18"></ng-icon>
+        Profile
+      </a>
+    </li>
+    <li>
+      <a>
+        <ng-icon name="bootstrapGearFill" size="18"></ng-icon>
+        Settings
+      </a>
+    </li>
+    <div class="divider m-0"></div>
+    <li>
+      <a (click)="onSignOutClick()">
+        <ng-icon name="tdesignLogout" size="18"></ng-icon>
+        Sign Out
+      </a>
+    </li>
+  </ul>
+</div>
