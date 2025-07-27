@@ -2,7 +2,7 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 
 export type Tag = string | null;
 
-export interface DashboardCardState {
+export interface DashboardCard {
   id: string;
   title: string;
   description: string;
@@ -10,12 +10,12 @@ export interface DashboardCardState {
   date: Date;
 }
 
-export interface DashboardCardCollectionState {
-  cards: DashboardCardState[];
+export interface DashboardCardCollection {
+  cards: DashboardCard[];
   isLoading: boolean;
 }
 
-const initialState: DashboardCardCollectionState = {
+const initialState: DashboardCardCollection = {
   cards: [],
   isLoading: false,
 };
@@ -23,7 +23,7 @@ const initialState: DashboardCardCollectionState = {
 export const DashboardCardCollectionStore = signalStore(
   withState(initialState),
   withMethods((store) => ({
-    addCard(card: DashboardCardState) {
+    addCard(card: DashboardCard) {
       patchState(store, {
         cards: [...store.cards(), card],
         isLoading: false,

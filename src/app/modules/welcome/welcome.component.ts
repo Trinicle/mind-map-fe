@@ -18,10 +18,10 @@ import { heroMagnifyingGlass } from '@ng-icons/heroicons/outline';
       heroMagnifyingGlass,
     }),
   ],
-  templateUrl: './welcome.html',
-  styleUrl: './welcome.css',
+  templateUrl: './welcome.component.html',
+  styleUrl: './welcome.component.css',
 })
-export class Welcome {
+export class WelcomeComponent {
   features = [
     {
       title: 'Interactive Topic Tree',

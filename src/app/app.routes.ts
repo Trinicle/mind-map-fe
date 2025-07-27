@@ -1,31 +1,31 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/auth/auth-guard';
-import { sessionGuard } from './core/auth/session-guard';
-import { Dashboard } from './modules/dashboard/dashboard';
-import { Signup } from './core/pages/signup/signup';
-import { Signin } from './core/pages/signin/signin';
-import { Welcome } from './modules/welcome/welcome';
+import { DashboardComponent } from './modules/dashboard/dashboard.component';
+import { WelcomeComponent } from './modules/welcome/welcome.component';
+import { sessionGuard } from './core/auth/session.guard';
+import { authGuard } from './core/auth/auth.guard';
+import { SigninComponent } from './core/pages/signin/signin.component';
+import { SignupComponent } from './core/pages/signup/signup.component';
 
 export const routes: Routes = [
   {
     path: 'welcome',
     canActivate: [sessionGuard],
-    component: Welcome,
+    component: WelcomeComponent,
   },
   {
     path: 'signin',
     canActivate: [sessionGuard],
-    component: Signin,
+    component: SigninComponent,
   },
   {
     path: 'signup',
     canActivate: [sessionGuard],
-    component: Signup,
+    component: SignupComponent,
   },
   {
     path: 'dashboard',
     canActivate: [authGuard],
-    component: Dashboard,
+    component: DashboardComponent,
   },
   {
     path: '**',

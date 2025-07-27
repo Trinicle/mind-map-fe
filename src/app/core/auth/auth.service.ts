@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { getApiUrl } from '../../shared/api/route';
 import { LoginRequest, SignupRequest } from './auth-model';
-import { catchError, map, tap, throwError } from 'rxjs';
-import { Toast } from '../services/toast';
+import { catchError, finalize, map, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { Session, User } from '@supabase/supabase-js';
 import { UserModel, UserStore } from './user-store';
+import { ToastService } from '../toast/toast.service';
 
 interface AuthResponse {
   message: string;
@@ -38,9 +38,9 @@ interface UserMetaData {
 @Injectable({
   providedIn: 'root',
 })
-export class Auth {
+export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly toast = inject(Toast);
+  private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
   private readonly userStore = inject(UserStore);
 
@@ -54,7 +54,8 @@ export class Auth {
           return throwError(() => error);
         }),
         map((response: AuthResponse) => this.populateUser(response.data)),
-        tap(() => this.router.navigate(['/dashboard']))
+        tap(() => this.router.navigate(['/dashboard'])),
+        finalize(() => this.userStore.setIsLoading(false))
       );
   }
 
@@ -68,7 +69,8 @@ export class Auth {
           return throwError(() => error);
         }),
         map((response: AuthResponse) => this.populateUser(response.data)),
-        tap(() => this.router.navigate(['/dashboard']))
+        tap(() => this.router.navigate(['/dashboard'])),
+        finalize(() => this.userStore.setIsLoading(false))
       );
   }
 
@@ -104,8 +106,8 @@ export class Auth {
       tap(() => {
         this.router.navigate(['/welcome']);
         this.userStore.clearUser();
-        this.userStore.setIsLoading(false);
-      })
+      }),
+      finalize(() => this.userStore.setIsLoading(false))
     );
   }
 
@@ -131,6 +133,8 @@ export class Auth {
         } else {
           this.router.navigate(['/signin']);
         }
+      }),
+      finalize(() => {
         this.userStore.setIsLoading(false);
       })
     );

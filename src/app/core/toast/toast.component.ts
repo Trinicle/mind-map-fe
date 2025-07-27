@@ -7,11 +7,11 @@ import { ToastStore } from './toast-store';
 @Component({
   selector: 'app-toast',
   imports: [NgIcon],
-  templateUrl: './toast.html',
-  styleUrl: './toast.css',
+  templateUrl: './toast.component.html',
+  styleUrl: './toast.component.css',
   providers: [provideIcons({ heroXMark })],
 })
-export class Toast {
+export class ToastComponent {
   protected readonly store = inject(ToastStore);
 
   close() {

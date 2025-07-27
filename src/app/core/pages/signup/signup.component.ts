@@ -1,22 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { Auth } from '../../auth/auth';
+import { Component, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../auth/auth.service';
 import { SignupRequest } from '../../auth/auth-model';
 
 @Component({
   selector: 'app-signup',
   imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './signup.html',
-  styleUrl: './signup.css',
+  templateUrl: './signup.component.html',
+  styleUrl: './signup.component.css',
 })
-export class Signup {
-  private readonly authService = inject(Auth);
+export class SignupComponent {
+  private readonly authService = inject(AuthService);
   protected readonly isLoading = signal(false);
 
   protected readonly form = new FormGroup({

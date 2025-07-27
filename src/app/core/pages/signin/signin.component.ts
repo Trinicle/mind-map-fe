@@ -1,16 +1,16 @@
 import { Component, inject, signal } from '@angular/core';
-import { Auth } from '../../auth/auth';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LoginRequest } from '../../auth/auth-model';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule],
-  templateUrl: './signin.html',
-  styleUrl: './signin.css',
+  templateUrl: './signin.component.html',
+  styleUrl: './signin.component.css',
 })
-export class Signin {
-  private readonly authService = inject(Auth);
+export class SigninComponent {
+  private readonly authService = inject(AuthService);
   protected readonly isLoading = signal(false);
 
   protected readonly form = new FormGroup({

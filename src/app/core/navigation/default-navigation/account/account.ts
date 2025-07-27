@@ -4,7 +4,7 @@ import { bootstrapGearFill } from '@ng-icons/bootstrap-icons';
 import { provideIcons } from '@ng-icons/core';
 import { UserStore } from '../../../auth/user-store';
 import { tdesignLogout, tdesignUser1Filled } from '@ng-icons/tdesign-icons';
-import { Auth } from '../../../auth/auth';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-account',
@@ -17,7 +17,7 @@ import { Auth } from '../../../auth/auth';
 })
 export class Account {
   protected readonly userStore = inject(UserStore);
-  protected readonly authService = inject(Auth);
+  protected readonly authService = inject(AuthService);
 
   onSignOutClick() {
     this.authService.signOut().subscribe();

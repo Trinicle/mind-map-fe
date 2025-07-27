@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { ToastStore } from '../toast/toast-store';
 import { timer } from 'rxjs';
+import { ToastStore } from './toast-store';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Toast {
+export class ToastService {
   private readonly store = inject(ToastStore);
 
   public show(message: string) {
