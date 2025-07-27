@@ -1,0 +1,91 @@
+<dialog #dialog class="modal">
+  <form [formGroup]="form" class="modal-box w-11/12 max-w-lg bg-base-200">
+    <div class="mb-4">
+      <h3 class="text-2xl font-bold">Create a Mind Map</h3>
+      <p class="text-base-content/50">
+        Upload a transcript to create a mind map
+      </p>
+    </div>
+
+    <div>
+      <div>
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Title</legend>
+          <input
+            name="title"
+            type="text"
+            class="input w-full"
+            placeholder="Enter a title"
+            formControlName="title"
+            required
+          />
+        </fieldset>
+      </div>
+      <div>
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend w-full">
+            Tags
+            <span class="label ml-auto">Press enter to add a tag</span>
+          </legend>
+          <input
+            name="name"
+            type="text"
+            class="input w-full"
+            placeholder="Add a tag"
+            [formControl]="tag"
+            (keydown.enter)="onAddTag()"
+          />
+        </fieldset>
+        <div class="mb-2 mt-1 flex flex-wrap gap-2">
+          @for (tag of form.controls.tags.value; track tag) {
+          <div
+            class="badge badge-primary cursor-pointer gap-1 hover:pr-1"
+            (click)="onDeleteTag(tag)"
+          >
+            {{ tag }}
+            <ng-icon name="heroXMark" />
+          </div>
+          }
+        </div>
+      </div>
+      <div>
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Description</legend>
+          <textarea
+            name="description"
+            class="textarea w-full"
+            rows="3"
+            placeholder="Enter a description"
+            formControlName="description"
+          ></textarea>
+        </fieldset>
+      </div>
+      <div>
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Date</legend>
+          <input
+            name="date"
+            type="date"
+            class="input w-full"
+            formControlName="date"
+            required
+          />
+        </fieldset>
+      </div>
+    </div>
+
+    <div class="modal-action">
+      <button type="button" class="btn btn-ghost" (click)="onClose()">
+        Close
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="onSubmit()"
+        [disabled]="form.invalid"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</dialog>

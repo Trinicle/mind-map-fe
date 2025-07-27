@@ -1,1 +1,14 @@
-<p>dashboard-card-empty works!</p>
+<div
+  class="w-full card border-1 border-base-300 bg-base-100 h-56 btn-card"
+  (click)="onClick()"
+>
+  <div class="card-body flex items-center justify-center">
+    <ng-icon
+      name="bootstrapPlusCircle"
+      size="100"
+      color="var(--color-base-content)"
+    />
+  </div>
+</div>
+
+<app-create-card-dialog />

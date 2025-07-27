@@ -5,6 +5,7 @@ import { DashboardCardEmptyComponent } from './dashboard-card-empty/dashboard-ca
 import { DashboardCardSkeletonComponent } from './dashboard-card-skeleton/dashboard-card-skeleton.component';
 import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
 import { DashboardCardCollectionStore } from './dashboard-store';
+import { DashboardService } from './dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,15 +15,16 @@ import { DashboardCardCollectionStore } from './dashboard-store';
     DashboardCardEmptyComponent,
     CommonModule,
   ],
-  providers: [DashboardCardCollectionStore],
+  providers: [DashboardCardCollectionStore, DashboardService],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
-  protected readonly store = inject(DashboardCardCollectionStore);
+  protected readonly cardsStore = inject(DashboardCardCollectionStore);
   protected readonly userStore = inject(UserStore);
+  private readonly dashboardService = inject(DashboardService);
 
   ngOnInit(): void {
-    this.store.setIsLoading(true);
+    this.dashboardService.getCards().subscribe();
   }
 }

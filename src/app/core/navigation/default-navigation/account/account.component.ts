@@ -9,13 +9,13 @@ import { AuthService } from '../../../auth/auth.service';
 @Component({
   selector: 'app-account',
   imports: [NgIconComponent],
-  templateUrl: './account.html',
-  styleUrl: './account.css',
+  templateUrl: './account.component.html',
+  styleUrl: './account.component.css',
   providers: [
     provideIcons({ bootstrapGearFill, tdesignLogout, tdesignUser1Filled }),
   ],
 })
-export class Account {
+export class AccountComponent {
   protected readonly userStore = inject(UserStore);
   protected readonly authService = inject(AuthService);
 

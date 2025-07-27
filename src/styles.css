@@ -73,12 +73,16 @@
   --noise: 0;
 }
 
-.btn {
-  @apply transform transition-transform duration-150 active:scale-[0.975];
+html {
+  scrollbar-gutter: auto !important;
+}
+
+.btn, .btn-card {
+  @apply transform transition-transform duration-150 active:scale-[0.975] cursor-pointer;
 }
 
 .fieldset-legend {
-  @apply text-base gap-0;
+  @apply gap-0;
 }
 
 fieldset:has(input:required) .fieldset-legend::after {
@@ -89,4 +93,13 @@ fieldset:has(input:required) .fieldset-legend::after {
 .input:focus,
 .select:focus {
   @apply outline-offset-0;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

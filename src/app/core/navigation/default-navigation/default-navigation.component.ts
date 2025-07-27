@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { Account } from './account/account';
 import { AuthService } from '../../auth/auth.service';
+import { AccountComponent } from './account/account.component';
 
 interface NavigationRoute {
   label: string;
@@ -13,7 +13,7 @@ interface NavigationRoute {
 
 @Component({
   selector: 'app-default-navigation',
-  imports: [CommonModule, RouterModule, Account],
+  imports: [CommonModule, RouterModule, AccountComponent],
   templateUrl: './default-navigation.component.html',
   styleUrl: './default-navigation.component.css',
 })

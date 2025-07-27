@@ -1,5 +1,4 @@
-import { Component, inject, input } from '@angular/core';
-import { bootstrapX } from '@ng-icons/bootstrap-icons';
+import { Component, inject } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroXMark } from '@ng-icons/heroicons/outline';
 import { ToastStore } from './toast-store';

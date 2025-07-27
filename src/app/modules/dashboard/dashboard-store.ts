@@ -29,6 +29,12 @@ export const DashboardCardCollectionStore = signalStore(
         isLoading: false,
       });
     },
+    addCards(cards: DashboardCard[]) {
+      patchState(store, {
+        cards: [...store.cards(), ...cards],
+        isLoading: false,
+      });
+    },
     setIsLoading(isLoading: boolean) {
       patchState(store, {
         isLoading,

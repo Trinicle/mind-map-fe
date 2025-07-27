@@ -49,11 +49,11 @@ export class AuthService {
     return this.http
       .post<AuthResponse>(getApiUrl('/auth/signup'), request)
       .pipe(
+        map((response: AuthResponse) => this.populateUser(response.data)),
         catchError((error: AuthError) => {
           this.toast.show('There was an error signing up!');
           return throwError(() => error);
         }),
-        map((response: AuthResponse) => this.populateUser(response.data)),
         tap(() => this.router.navigate(['/dashboard'])),
         finalize(() => this.userStore.setIsLoading(false))
       );
@@ -64,11 +64,11 @@ export class AuthService {
     return this.http
       .post<AuthResponse>(getApiUrl('/auth/signin'), request)
       .pipe(
+        map((response: AuthResponse) => this.populateUser(response.data)),
         catchError((error: AuthError) => {
           this.toast.show('There was an error logging in!');
           return throwError(() => error);
         }),
-        map((response: AuthResponse) => this.populateUser(response.data)),
         tap(() => this.router.navigate(['/dashboard'])),
         finalize(() => this.userStore.setIsLoading(false))
       );
@@ -114,11 +114,6 @@ export class AuthService {
   public checkSession() {
     this.userStore.setIsLoading(true);
     return this.http.get<SessionResponse>(getApiUrl('/auth/session')).pipe(
-      catchError((error) => {
-        this.userStore.clearUser();
-        this.userStore.setIsLoading(false);
-        return throwError(() => error);
-      }),
       map((response) => {
         const data = response.data;
         if (!data) {
@@ -126,6 +121,11 @@ export class AuthService {
           return false;
         }
         return true;
+      }),
+      catchError((error) => {
+        this.userStore.clearUser();
+        this.userStore.setIsLoading(false);
+        return throwError(() => error);
       }),
       tap((isAuthenticated) => {
         if (isAuthenticated) {

@@ -2,10 +2,8 @@
   <div class="container mx-auto h-screen flex items-center justify-center">
     <div class="card card-body card-border bg-base-100 max-w-xl">
       <div class="flex flex-col gap-2 items-center mb-4 card-title">
-        <h1 class="text-5xl font-bold">Login</h1>
-        <p class="text-lg">
-          Login to your account to get started with Mind Map.
-        </p>
+        <h1 class="text-4xl font-bold">Login</h1>
+        <p>Login to your account to get started with Mind Map.</p>
       </div>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -16,7 +14,7 @@
               name="email"
               type="email"
               formControlName="email"
-              class="input input-lg w-full"
+              class="input w-full"
               autocomplete="email"
               required
               email
@@ -29,7 +27,7 @@
               name="password"
               type="password"
               formControlName="password"
-              class="input input-lg w-full"
+              class="input w-full"
               minlength="8"
               autocomplete="current-password"
               required
@@ -39,7 +37,7 @@
           <div class="card-actions">
             <button
               type="submit"
-              class="btn btn-lg btn-primary w-full"
+              class="btn btn-primary w-full"
               [disabled]="form.invalid || isLoading()"
             >
               @if (isLoading()) {
