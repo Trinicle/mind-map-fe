@@ -23,6 +23,18 @@
       </div>
       <div>
         <fieldset class="fieldset">
+          <legend class="fieldset-legend">Date</legend>
+          <input
+            name="date"
+            type="date"
+            class="input w-full"
+            formControlName="date"
+            required
+          />
+        </fieldset>
+      </div>
+      <div>
+        <fieldset class="fieldset">
           <legend class="fieldset-legend w-full">
             Tags
             <span class="label ml-auto">Press enter to add a tag</span>
@@ -60,14 +72,16 @@
           ></textarea>
         </fieldset>
       </div>
+
       <div>
         <fieldset class="fieldset">
-          <legend class="fieldset-legend">Date</legend>
+          <legend class="fieldset-legend">Transcript</legend>
           <input
-            name="date"
-            type="date"
-            class="input w-full"
-            formControlName="date"
+            name="transcript"
+            type="file"
+            class="file-input w-full"
+            (change)="onFileSelected($event)"
+            accept=".vtt, .docx, .txt"
             required
           />
         </fieldset>

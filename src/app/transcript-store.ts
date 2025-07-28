@@ -4,8 +4,6 @@ interface Transcript {
   date: Date;
   content: string;
   userId: string;
-  status: 'processing' | 'completed' | 'error';
-  participants: string[];
   createdAt: Date;
   updatedAt: Date;
 }

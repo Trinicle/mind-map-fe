@@ -1,7 +1,15 @@
-import { Component, ElementRef, viewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroXMark } from '@ng-icons/heroicons/outline';
+import { DashboardService } from '../../dashboard.service';
+import { DashboardCardPostRequest } from '../../dashboard-store';
 
 @Component({
   selector: 'app-create-card-dialog',
@@ -11,15 +19,27 @@ import { heroXMark } from '@ng-icons/heroicons/outline';
   providers: [provideIcons({ heroXMark })],
 })
 export class CreateCardDialogComponent {
+  private readonly dashboardService = inject(DashboardService);
+
   protected readonly form = new FormGroup({
     title: new FormControl(''),
     tags: new FormControl<string[]>([]),
     description: new FormControl(''),
-    date: new FormControl<Date | null>(null),
+    date: new FormControl<string>(''),
+    transcript: new FormControl<File | null>(null),
   });
   protected tag = new FormControl('');
   protected readonly dialog =
     viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
+
+  protected onFileSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.form.patchValue({
+        transcript: file,
+      });
+    }
+  }
 
   protected onAddTag() {
     const newTag = this.tag.value;
@@ -47,6 +67,21 @@ export class CreateCardDialogComponent {
   }
 
   protected onSubmit() {
-    console.log(this.form.value);
+    const { title, tags, description, date, transcript } = this.form.value;
+
+    if (!transcript || !title || !date) {
+      return;
+    }
+
+    const request: DashboardCardPostRequest = {
+      title: title,
+      tags: tags ?? [],
+      description: description ?? '',
+      date: new Date(date),
+      file: transcript,
+    };
+
+    this.onClose();
+    this.dashboardService.createCard(request).subscribe();
   }
 }

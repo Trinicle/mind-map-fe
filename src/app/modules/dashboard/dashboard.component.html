@@ -31,7 +31,7 @@
           </form>
         </div>
       </div>
-      <div class="grid grid-cols-5 gap-8">
+      <div class="grid grid-cols-[repeat(auto-fit,215px)] gap-8">
         @if (cardsStore.isLoading()) {
         <app-dashboard-card-skeleton />
         <app-dashboard-card-skeleton />
@@ -47,9 +47,11 @@
         <app-dashboard-card-skeleton />
         } @else { @for (card of cardsStore.cards(); track card.id) {
         <app-dashboard-card [card]="card" />
-        }
+        } @if (!cardsStore.currentCreation()) {
         <app-dashboard-card-empty />
-        }
+        } @else {
+        <app-dashboard-card-skeleton />
+        } }
       </div>
     </div>
   </div>
