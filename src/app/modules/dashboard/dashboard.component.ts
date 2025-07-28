@@ -15,7 +15,7 @@ import { DashboardService } from './dashboard.service';
     DashboardCardEmptyComponent,
     CommonModule,
   ],
-  providers: [DashboardCardCollectionStore, DashboardService],
+  providers: [DashboardService],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -25,6 +25,8 @@ export class DashboardComponent implements OnInit {
   private readonly dashboardService = inject(DashboardService);
 
   ngOnInit(): void {
-    this.dashboardService.getCards().subscribe();
+    if (this.cardsStore.cards().length === 0) {
+      this.dashboardService.getCards().subscribe();
+    }
   }
 }

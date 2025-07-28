@@ -29,6 +29,7 @@ const initialState: DashboardCardCollection = {
 };
 
 export const DashboardCardCollectionStore = signalStore(
+  { providedIn: 'root' },
   withState(initialState),
   withMethods((store) => ({
     addCard(card: DashboardCard) {
@@ -41,6 +42,11 @@ export const DashboardCardCollectionStore = signalStore(
       patchState(store, {
         cards: [...store.cards(), ...cards],
         isLoading: false,
+      });
+    },
+    clearCards() {
+      patchState(store, {
+        cards: [],
       });
     },
     setIsLoading(isLoading: boolean) {
