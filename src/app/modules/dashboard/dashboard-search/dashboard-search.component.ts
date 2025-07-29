@@ -10,7 +10,7 @@ import {
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DashboardService } from '../dashboard.service';
 import { DashboardCardSearchRequest } from '../dashboard-models';
-import { map, of } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -29,12 +29,18 @@ export class DashboardSearchComponent implements OnInit {
 
   readonly dropdown = viewChild<ElementRef<HTMLDivElement>>('dropdown');
   readonly isDropdownVisible = signal(false);
-  tags$ = of<string[]>([]);
-  resultTags$ = of<string[]>([]);
+  readonly isTagsListEmpty = signal(true);
+
+  private readonly tagsSubject = new BehaviorSubject<string[]>([]);
+  readonly tags$ = this.tagsSubject.asObservable();
+  readonly resultTags$ = new BehaviorSubject<string[]>([]);
 
   ngOnInit(): void {
-    this.tags$ = this.dashboardService.getTags();
-    this.tags$.subscribe();
+    this.dashboardService.getTags().subscribe((tags) => {
+      this.isTagsListEmpty.set(tags.length === 0);
+      this.tagsSubject.next(tags);
+      this.resultTags$.next(tags); // Initially show all tags
+    });
   }
 
   onBlur() {
@@ -51,13 +57,13 @@ export class DashboardSearchComponent implements OnInit {
 
   onInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    this.resultTags$ = this.tags$.pipe(
-      map((tags) =>
-        tags.filter((tag) =>
-          tag.toLowerCase().includes(input.value.toLowerCase())
-        )
-      )
+    const searchTerm = input.value.toLowerCase();
+
+    const filteredTags = this.tagsSubject.value.filter((tag) =>
+      tag.toLowerCase().includes(searchTerm)
     );
+    this.isTagsListEmpty.set(filteredTags.length === 0);
+    this.resultTags$.next(filteredTags);
   }
 
   onFocus() {

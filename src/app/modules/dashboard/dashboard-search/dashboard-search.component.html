@@ -20,6 +20,7 @@
         [class.dropdown-open]="isDropdownVisible()"
       >
         <input
+          name="tags"
           type="text"
           class="input input-bordered w-full"
           placeholder="Select a tag"
@@ -32,7 +33,9 @@
         <ul
           class="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-full max-h-60 overflow-y-auto mt-1"
         >
-          @for (tag of resultTags$ | async; track tag) {
+          @if (isTagsListEmpty()) {
+          <li class="px-3 py-1.5">No tags found</li>
+          } @for (tag of resultTags$ | async; track tag) {
           <li>
             <label class="label text-base-content">
               <input type="checkbox" class="checkbox checkbox-primary" />

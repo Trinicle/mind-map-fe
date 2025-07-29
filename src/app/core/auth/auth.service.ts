@@ -87,6 +87,7 @@ export class AuthService {
       firstName: metadata.firstName,
       lastName: metadata.lastName,
       accessToken: session.access_token,
+      refreshToken: session.refresh_token,
     };
 
     this.userStore.setUser(userModel);

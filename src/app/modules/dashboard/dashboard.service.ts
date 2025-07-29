@@ -19,6 +19,10 @@ interface DashboardCardResponse {
   data: DashboardCard;
 }
 
+interface DashboardTagsResponse {
+  data: string[];
+}
+
 @Injectable()
 export class DashboardService {
   private readonly http = inject(HttpClient);
@@ -61,7 +65,17 @@ export class DashboardService {
   }
 
   getTags() {
-    return this.http.get<string[]>(getApiUrl('/dashboard/mindmap/tags'));
+    return this.http
+      .get<DashboardTagsResponse>(getApiUrl('/dashboard/mindmap/tags'))
+      .pipe(
+        map((response) => {
+          return response.data;
+        }),
+        catchError((error: ApiError) => {
+          this.toast.show(error.message);
+          return throwError(() => error);
+        })
+      );
   }
 
   createCard(card: DashboardCardPostRequest) {

@@ -8,6 +8,7 @@ export interface UserModel {
   firstName: string;
   lastName: string;
   accessToken?: string;
+  refreshToken?: string;
 }
 
 interface UserState {
@@ -38,6 +39,9 @@ export const UserStore = signalStore(
     },
     getAccessToken() {
       return store.user()?.accessToken;
+    },
+    getRefreshToken() {
+      return store.user()?.refreshToken;
     },
     getFirstName() {
       return store.user()?.firstName;
