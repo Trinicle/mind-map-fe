@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../auth/auth.service';
 import { AccountComponent } from './account/account.component';
 
 interface NavigationRoute {
@@ -18,8 +17,7 @@ interface NavigationRoute {
   styleUrl: './default-navigation.component.css',
 })
 export class DefaultNavigationComponent {
-  protected readonly router = inject(Router);
-  protected readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
   routes: NavigationRoute[] = [
     {

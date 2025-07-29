@@ -1,0 +1,58 @@
+<div>
+  <h2 class="text-2xl font-bold">Filters</h2>
+  <form [formGroup]="form">
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Title</legend>
+      <input
+        name="title"
+        type="text"
+        class="input w-full"
+        formControlName="title"
+        (blur)="onBlur()"
+      />
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Tags</legend>
+      <div
+        #dropdown
+        class="dropdown w-full"
+        [class.dropdown-open]="isDropdownVisible()"
+      >
+        <input
+          type="text"
+          class="input input-bordered w-full"
+          placeholder="Select a tag"
+          formControlName="tags"
+          (focus)="onFocus()"
+          (blur)="onBlur()"
+          (input)="onInputChange($event)"
+        />
+
+        <ul
+          class="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-full max-h-60 overflow-y-auto mt-1"
+        >
+          @for (tag of resultTags$ | async; track tag) {
+          <li>
+            <label class="label text-base-content">
+              <input type="checkbox" class="checkbox checkbox-primary" />
+              {{ tag }}
+            </label>
+          </li>
+          }
+        </ul>
+      </div>
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Date</legend>
+      <input
+        name="date"
+        type="date"
+        class="input w-full"
+        formControlName="date"
+        (blur)="onBlur()"
+      />
+    </fieldset>
+  </form>
+</div>

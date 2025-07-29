@@ -17,7 +17,7 @@ import { AuthService } from '../../../auth/auth.service';
 })
 export class AccountComponent {
   protected readonly userStore = inject(UserStore);
-  protected readonly authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
   onSignOutClick() {
     this.authService.signOut().subscribe();

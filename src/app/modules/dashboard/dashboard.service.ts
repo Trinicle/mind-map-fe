@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import {
-  DashboardCard,
-  DashboardCardCollectionStore,
-  DashboardCardPostRequest,
-} from './dashboard-store';
+import { DashboardCardCollectionStore } from './dashboard-store';
 import { getApiUrl } from '../../shared/api/route';
 import { catchError, finalize, map, throwError } from 'rxjs';
 import { ApiError } from '../../shared/types/api.types';
 import { ToastService } from '../../core/toast/toast.service';
+import {
+  DashboardCard,
+  DashboardCardPostRequest,
+  DashboardCardSearchRequest,
+} from './dashboard-models';
 
 interface DashboardResponse {
   data: DashboardCard[];
@@ -42,6 +43,25 @@ export class DashboardService {
           this.cardsStore.setIsLoading(false);
         })
       );
+  }
+
+  getFilteredCards(request: DashboardCardSearchRequest) {
+    this.cardsStore.setIsLoading(true);
+
+    return this.http.get<DashboardResponse>(
+      getApiUrl('/dashboard/mindmap/search'),
+      {
+        params: {
+          title: request.title,
+          tags: request.tags,
+          date: request.date,
+        },
+      }
+    );
+  }
+
+  getTags() {
+    return this.http.get<string[]>(getApiUrl('/dashboard/mindmap/tags'));
   }
 
   createCard(card: DashboardCardPostRequest) {

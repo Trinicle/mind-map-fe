@@ -12,9 +12,9 @@ import { SignupRequest } from '../../auth/auth-model';
 })
 export class SignupComponent {
   private readonly authService = inject(AuthService);
-  protected readonly isLoading = signal(false);
+  readonly isLoading = signal(false);
 
-  protected readonly form = new FormGroup({
+  readonly form = new FormGroup({
     firstName: new FormControl(''),
     lastName: new FormControl(''),
     email: new FormControl(''),

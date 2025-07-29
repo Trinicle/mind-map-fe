@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { DashboardCard } from '../dashboard-store';
+import { DashboardCard } from '../dashboard-models';
 
 @Component({
   selector: 'app-dashboard-card',

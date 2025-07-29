@@ -13,7 +13,7 @@ import { ToastStore } from './toast-store';
 export class ToastComponent {
   protected readonly store = inject(ToastStore);
 
-  close() {
+  public close() {
     this.store.hide();
   }
 }

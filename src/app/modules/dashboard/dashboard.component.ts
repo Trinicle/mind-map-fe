@@ -6,6 +6,7 @@ import { DashboardCardSkeletonComponent } from './dashboard-card-skeleton/dashbo
 import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
 import { DashboardCardCollectionStore } from './dashboard-store';
 import { DashboardService } from './dashboard.service';
+import { DashboardSearchComponent } from './dashboard-search/dashboard-search.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +14,7 @@ import { DashboardService } from './dashboard.service';
     DashboardCardSkeletonComponent,
     DashboardCardComponent,
     DashboardCardEmptyComponent,
+    DashboardSearchComponent,
     CommonModule,
   ],
   providers: [DashboardService],

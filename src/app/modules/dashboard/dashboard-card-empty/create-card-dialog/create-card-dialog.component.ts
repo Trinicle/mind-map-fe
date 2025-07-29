@@ -9,7 +9,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroXMark } from '@ng-icons/heroicons/outline';
 import { DashboardService } from '../../dashboard.service';
-import { DashboardCardPostRequest } from '../../dashboard-store';
+import { DashboardCardPostRequest } from '../../dashboard-models';
 
 @Component({
   selector: 'app-create-card-dialog',
@@ -21,18 +21,17 @@ import { DashboardCardPostRequest } from '../../dashboard-store';
 export class CreateCardDialogComponent {
   private readonly dashboardService = inject(DashboardService);
 
-  protected readonly form = new FormGroup({
+  readonly form = new FormGroup({
     title: new FormControl(''),
     tags: new FormControl<string[]>([]),
     description: new FormControl(''),
     date: new FormControl<string>(''),
     transcript: new FormControl<File | null>(null),
   });
-  protected tag = new FormControl('');
-  protected readonly dialog =
-    viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
+  readonly tag = new FormControl('');
+  readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
 
-  protected onFileSelected(event: Event) {
+  onFileSelected(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
       this.form.patchValue({
@@ -41,7 +40,7 @@ export class CreateCardDialogComponent {
     }
   }
 
-  protected onAddTag() {
+  onAddTag() {
     const newTag = this.tag.value;
     const tagsControl = this.form.controls.tags;
     const tags = tagsControl.value ?? [];
@@ -52,7 +51,7 @@ export class CreateCardDialogComponent {
     }
   }
 
-  protected onDeleteTag(tag: string) {
+  onDeleteTag(tag: string) {
     const tagsControl = this.form.controls.tags;
     const tags = tagsControl.value ?? [];
     tagsControl.setValue(tags.filter((t) => t !== tag));
@@ -66,7 +65,7 @@ export class CreateCardDialogComponent {
     this.dialog().nativeElement.close();
   }
 
-  protected onSubmit() {
+  onSubmit() {
     const { title, tags, description, date, transcript } = this.form.value;
 
     if (!transcript || !title || !date) {

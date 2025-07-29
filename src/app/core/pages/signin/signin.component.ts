@@ -11,9 +11,9 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class SigninComponent {
   private readonly authService = inject(AuthService);
-  protected readonly isLoading = signal(false);
+  readonly isLoading = signal(false);
 
-  protected readonly form = new FormGroup({
+  readonly form = new FormGroup({
     email: new FormControl(''),
     password: new FormControl(''),
   });

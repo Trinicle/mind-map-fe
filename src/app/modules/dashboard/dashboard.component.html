@@ -8,28 +8,7 @@
             Welcome back, {{ userStore.getFirstName() }}!
           </h3>
         </div>
-        <div>
-          <h2 class="text-2xl font-bold">Filters</h2>
-          <form>
-            <fieldset class="fieldset">
-              <legend class="fieldset-legend">Title</legend>
-              <input name="title" type="text" class="input w-full" />
-            </fieldset>
-            <fieldset class="fieldset">
-              <legend class="fieldset-legend">Tags</legend>
-              <select class="select max-h-64">
-                <option>Select a tag</option>
-                <option>Tag 1</option>
-                <option>Tag 2</option>
-                <option>Tag 3</option>
-              </select>
-            </fieldset>
-            <fieldset class="fieldset">
-              <legend class="fieldset-legend">Date</legend>
-              <input name="date" type="date" class="input w-full" />
-            </fieldset>
-          </form>
-        </div>
+        <app-dashboard-search />
       </div>
       <div class="grid grid-cols-[repeat(auto-fit,215px)] gap-8">
         @if (cardsStore.isLoading()) {

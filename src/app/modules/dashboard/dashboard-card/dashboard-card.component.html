@@ -1,6 +1,6 @@
 <div class="w-full card border-1 border-base-300 bg-base-100 h-56 btn-card">
-  <div class="card-body gap-5 p-4">
-    <div class="flex flex-col gap-1.5">
+  <div class="card-body p-4">
+    <div class="flex flex-col gap-1.5 mb-3">
       <div class="card-title">{{ card()?.title }}</div>
       <div class="flex gap-2 overflow-x-scroll no-scrollbar">
         @for (tag of card()?.tags; track tag) {
@@ -8,10 +8,13 @@
         }
       </div>
     </div>
-    <div class="h-full">
+    <div class="h-full mb-1">
       <p>
         {{ card()?.description }}
       </p>
+    </div>
+    <div class="ml-auto right-0 text-xs text-base-content/50">
+      {{ card()?.date }}
     </div>
   </div>
 </div>

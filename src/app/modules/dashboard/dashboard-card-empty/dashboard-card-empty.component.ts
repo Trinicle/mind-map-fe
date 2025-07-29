@@ -11,10 +11,11 @@ import { CreateCardDialogComponent } from './create-card-dialog/create-card-dial
   providers: [provideIcons({ bootstrapPlusCircle })],
 })
 export class DashboardCardEmptyComponent {
-  protected readonly modal = viewChild<CreateCardDialogComponent>(
+  private readonly modal = viewChild<CreateCardDialogComponent>(
     CreateCardDialogComponent
   );
-  protected onClick() {
+
+  onClick() {
     this.modal()?.showModal();
   }
 }
