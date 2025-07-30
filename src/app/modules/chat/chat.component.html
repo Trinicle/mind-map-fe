@@ -1,0 +1,33 @@
+<div class="pt-16">
+  <div class="max-w-[48rem] mx-auto">
+    <div>
+      <div class="mt-[300px] mb-8">
+        <h1 class="text-4xl flex justify-center">Ask about a transcript...</h1>
+      </div>
+      <div class="bg-base-100 rounded-3xl p-4">
+        <div
+          contenteditable="true"
+          class="w-full max-h-72 overflow-y-auto hover:outline-none focus:outline-none px-1.5 before:text-base-content/70"
+          placeholder="Ask anything"
+          (input)="onInput($event)"
+        ></div>
+        <div class="flex justify-between items-center mt-2">
+          <div
+            class="tooltip tooltip-bottom"
+            data-tip="Add a transcript for context"
+          >
+            <a class="btn btn-circle btn-ghost flex items-center">
+              <ng-icon name="tdesignPlus" size="30" />
+            </a>
+          </div>
+
+          <a
+            class="btn btn-circle btn-ghost flex items-center bg-base-200 hover:border-0 hover:bg-base-300"
+          >
+            <ng-icon name="tdesignArrowUp" size="25" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

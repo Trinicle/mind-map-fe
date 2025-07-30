@@ -21,6 +21,12 @@ export class DefaultNavigationComponent {
 
   routes: NavigationRoute[] = [
     {
+      label: 'Chat',
+      path: '/chat',
+      isActive: () => this.router.url === '/chat',
+      onClick: () => this.router.navigate(['/chat']),
+    },
+    {
       label: 'Dashboard',
       path: '/dashboard',
       isActive: () => this.router.url === '/dashboard',
