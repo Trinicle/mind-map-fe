@@ -13,14 +13,12 @@ import {
 
 interface DashboardResponse {
   data: DashboardCard[];
+  message: string;
 }
 
 interface DashboardCardResponse {
   data: DashboardCard;
-}
-
-interface DashboardTagsResponse {
-  data: string[];
+  message: string;
 }
 
 @Injectable()
@@ -62,20 +60,6 @@ export class DashboardService {
         },
       }
     );
-  }
-
-  getTags() {
-    return this.http
-      .get<DashboardTagsResponse>(getApiUrl('/dashboard/mindmap/tags'))
-      .pipe(
-        map((response) => {
-          return response.data;
-        }),
-        catchError((error: ApiError) => {
-          this.toast.show(error.message);
-          return throwError(() => error);
-        })
-      );
   }
 
   createCard(card: DashboardCardPostRequest) {

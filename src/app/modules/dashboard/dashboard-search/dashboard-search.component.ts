@@ -4,14 +4,19 @@ import {
   HostListener,
   inject,
   OnInit,
+  resource,
   signal,
   viewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DashboardService } from '../dashboard.service';
-import { DashboardCardSearchRequest } from '../dashboard-models';
-import { BehaviorSubject, map } from 'rxjs';
+import {
+  DashboardCardSearchRequest,
+  DashboardTagsResponseSchema,
+} from '../dashboard-models';
 import { CommonModule } from '@angular/common';
+import { httpResource } from '@angular/common/http';
+import { getApiUrl } from '../../../shared/api/route';
 
 @Component({
   selector: 'app-dashboard-search',
@@ -20,28 +25,29 @@ import { CommonModule } from '@angular/common';
   styleUrl: './dashboard-search.component.css',
 })
 export class DashboardSearchComponent implements OnInit {
-  private readonly dashboardService = inject(DashboardService);
+  readonly dropdown = viewChild<ElementRef<HTMLDivElement>>('dropdown');
+  readonly tagFilter = signal<string>('');
   readonly form = new FormGroup({
     title: new FormControl<string>(''),
     tags: new FormControl<string[]>([]),
     date: new FormControl<string>(''),
   });
 
-  readonly dropdown = viewChild<ElementRef<HTMLDivElement>>('dropdown');
+  readonly tags = httpResource<string[]>(
+    () => ({
+      url: getApiUrl(`/dashboard/mindmap/tags`),
+      params: {
+        name: this.tagFilter(),
+      },
+    }),
+    {
+      defaultValue: [],
+      parse: (value) => DashboardTagsResponseSchema.parse(value).data,
+    }
+  );
   readonly isDropdownVisible = signal(false);
-  readonly isTagsListEmpty = signal(true);
 
-  private readonly tagsSubject = new BehaviorSubject<string[]>([]);
-  readonly tags$ = this.tagsSubject.asObservable();
-  readonly resultTags$ = new BehaviorSubject<string[]>([]);
-
-  ngOnInit(): void {
-    this.dashboardService.getTags().subscribe((tags) => {
-      this.isTagsListEmpty.set(tags.length === 0);
-      this.tagsSubject.next(tags);
-      this.resultTags$.next(tags); // Initially show all tags
-    });
-  }
+  ngOnInit(): void {}
 
   onBlur() {
     const { title, tags, date } = this.form.value;
@@ -59,11 +65,7 @@ export class DashboardSearchComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const searchTerm = input.value.toLowerCase();
 
-    const filteredTags = this.tagsSubject.value.filter((tag) =>
-      tag.toLowerCase().includes(searchTerm)
-    );
-    this.isTagsListEmpty.set(filteredTags.length === 0);
-    this.resultTags$.next(filteredTags);
+    this.tagFilter.set(searchTerm);
   }
 
   onFocus() {

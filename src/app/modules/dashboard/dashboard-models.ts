@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export interface DashboardCardPostRequest {
   title: string;
   description: string;
@@ -25,3 +27,10 @@ export interface DashboardCardCollection {
   isLoading: boolean;
   currentCreation: boolean;
 }
+
+export const DashboardTagsResponseSchema = z.object({
+  data: z.array(z.string()),
+  message: z.string(),
+});
+
+export type DashboardTagsResponse = z.infer<typeof DashboardTagsResponseSchema>;
