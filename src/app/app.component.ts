@@ -16,11 +16,11 @@ export class AppComponent implements OnInit {
   protected readonly title = signal('mind-map-fe');
 
   ngOnInit(): void {
-    interval(600000)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.auth.checkSession())
-      )
-      .subscribe();
+    // interval(600000)
+    //   .pipe(
+    //     startWith(0),
+    //     switchMap(() => this.auth.checkSession())
+    //   )
+    //   .subscribe();
   }
 }

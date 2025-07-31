@@ -7,8 +7,8 @@ export interface UserModel {
   email: string;
   firstName: string;
   lastName: string;
-  accessToken?: string;
-  refreshToken?: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 interface UserState {

@@ -34,14 +34,26 @@
           class="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-full max-h-60 overflow-y-auto mt-1"
         >
           @if (isTagsListEmpty()) {
-          <li class="px-3 py-1.5">No tags found</li>
-          } @for (tag of resultTags$ | async; track tag) {
-          <li>
-            <label class="label text-base-content">
-              <input type="checkbox" class="checkbox checkbox-primary" />
-              {{ tag }}
-            </label>
-          </li>
+            <li class="px-3 py-1.5">No tags found</li>
+          } @else { 
+            @let tags = resultTags$ | async; 
+
+            @if (tags && tags.length > 1) {
+              <li>
+                <label class="label text-base-content">
+                  <input type="checkbox" class="checkbox checkbox-primary" />
+                  Clear all
+                </label>
+              </li>
+            } 
+            @for (tag of tags; track tag) {
+              <li>
+                <label class="label text-base-content">
+                  <input type="checkbox" class="checkbox checkbox-primary" />
+                  {{ tag }}
+                </label>
+              </li>
+            } 
           }
         </ul>
       </div>
