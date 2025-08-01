@@ -2,13 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { DashboardCardCollectionStore } from './dashboard-store';
 import { getApiUrl } from '../../shared/api/route';
-import { catchError, finalize, map, throwError } from 'rxjs';
+import { catchError, finalize, map, Observable, throwError } from 'rxjs';
 import { ApiError } from '../../shared/types/api.types';
 import { ToastService } from '../../core/toast/toast.service';
 import {
   DashboardCard,
   DashboardCardPostRequest,
   DashboardCardSearchRequest,
+  DashboardTags,
+  DashboardTagsResponse,
 } from './dashboard-models';
 
 interface DashboardResponse {
@@ -43,6 +45,18 @@ export class DashboardService {
         }),
         finalize(() => {
           this.cardsStore.setIsLoading(false);
+        })
+      );
+  }
+
+  getTags(): Observable<DashboardTags[]> {
+    return this.http
+      .get<DashboardTagsResponse>(getApiUrl('/dashboard/mindmap/tags'))
+      .pipe(
+        map((response) => response.data),
+        catchError((error: ApiError) => {
+          this.toast.show(error.message);
+          return throwError(() => error);
         })
       );
   }

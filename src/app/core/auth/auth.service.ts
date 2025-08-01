@@ -130,13 +130,6 @@ export class AuthService {
         this.userStore.setIsLoading(false);
         return throwError(() => error);
       }),
-      tap((isAuthenticated) => {
-        if (isAuthenticated) {
-          this.router.navigate(['/dashboard']);
-        } else {
-          this.router.navigate(['/signin']);
-        }
-      }),
       finalize(() => {
         this.userStore.setIsLoading(false);
       })
