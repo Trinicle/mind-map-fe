@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   ElementRef,
   HostListener,
   inject,
@@ -9,14 +10,9 @@ import {
   viewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { DashboardService } from '../dashboard.service';
-import {
-  DashboardCardSearchRequest,
-  DashboardTagsResponseSchema,
-} from '../dashboard-models';
+import { DashboardCardSearchRequest, DashboardTags } from '../dashboard-models';
 import { CommonModule } from '@angular/common';
-import { httpResource } from '@angular/common/http';
-import { getApiUrl } from '../../../shared/api/route';
+import { DashboardService } from '../dashboard.service';
 
 @Component({
   selector: 'app-dashboard-search',
@@ -25,6 +21,7 @@ import { getApiUrl } from '../../../shared/api/route';
   styleUrl: './dashboard-search.component.css',
 })
 export class DashboardSearchComponent implements OnInit {
+  readonly dashboardService = inject(DashboardService);
   readonly dropdown = viewChild<ElementRef<HTMLDivElement>>('dropdown');
   readonly tagFilter = signal<string>('');
   readonly form = new FormGroup({
@@ -33,21 +30,20 @@ export class DashboardSearchComponent implements OnInit {
     date: new FormControl<string>(''),
   });
 
-  readonly tags = httpResource<string[]>(
-    () => ({
-      url: getApiUrl(`/dashboard/mindmap/tags`),
-      params: {
-        name: this.tagFilter(),
-      },
-    }),
-    {
-      defaultValue: [],
-      parse: (value) => DashboardTagsResponseSchema.parse(value).data,
-    }
-  );
+  readonly tags = signal<DashboardTags[]>([]);
+  readonly filteredTags = computed(() => {
+    return this.tags().filter((tag) =>
+      tag.name.toLowerCase().includes(this.tagFilter().toLowerCase())
+    );
+  });
+
   readonly isDropdownVisible = signal(false);
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dashboardService.getTags().subscribe({
+      next: (tags) => this.tags.set(tags),
+    });
+  }
 
   onBlur() {
     const { title, tags, date } = this.form.value;

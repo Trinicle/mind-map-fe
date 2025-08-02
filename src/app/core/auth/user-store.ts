@@ -1,4 +1,5 @@
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { Session } from '@supabase/supabase-js';
 
 const STORAGE_KEY = 'user_session';
 
@@ -29,6 +30,17 @@ export const UserStore = signalStore(
     setUser(user: UserModel) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
       patchState(store, { user });
+    },
+    setSession(session: Session) {
+      const accessToken = session.access_token;
+      const refreshToken = session.refresh_token;
+
+      const user = store.user();
+      if (user) {
+        user.accessToken = accessToken;
+        user.refreshToken = refreshToken;
+        patchState(store, { user });
+      }
     },
     clearUser() {
       localStorage.removeItem(STORAGE_KEY);

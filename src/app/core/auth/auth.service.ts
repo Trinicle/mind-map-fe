@@ -114,7 +114,7 @@ export class AuthService {
     );
   }
 
-  public checkSession() {
+  public refreshSession() {
     this.userStore.setIsLoading(true);
     return this.http.get<SessionResponse>(getApiUrl('/auth/session')).pipe(
       map((response) => {
@@ -123,6 +123,7 @@ export class AuthService {
           this.userStore.clearUser();
           return false;
         }
+        this.userStore.setSession(data);
         return true;
       }),
       catchError((error) => {

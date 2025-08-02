@@ -28,9 +28,11 @@ export interface DashboardCardCollection {
   currentCreation: boolean;
 }
 
-export const DashboardTagsResponseSchema = z.object({
-  data: z.array(z.string()),
-  message: z.string(),
-});
+export interface DashboardTagsResponse {
+  data: DashboardTags[];
+  message: string;
+}
 
-export type DashboardTagsResponse = z.infer<typeof DashboardTagsResponseSchema>;
+export interface DashboardTags {
+  name: string;
+}
