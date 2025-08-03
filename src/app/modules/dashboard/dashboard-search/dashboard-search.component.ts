@@ -26,7 +26,7 @@ export class DashboardSearchComponent implements OnInit {
   readonly tagFilter = signal<string>('');
   readonly form = new FormGroup({
     title: new FormControl<string>(''),
-    tags: new FormControl<string[]>([]),
+    activeTags: new FormControl<string[]>([]),
     date: new FormControl<string>(''),
   });
 
@@ -46,11 +46,11 @@ export class DashboardSearchComponent implements OnInit {
   }
 
   onBlur() {
-    const { title, tags, date } = this.form.value;
+    const { title, activeTags, date } = this.form.value;
 
     const request: DashboardCardSearchRequest = {
       title: title ?? '',
-      tags: tags ?? [],
+      tags: activeTags ?? [],
       date: date ?? '',
     };
 
@@ -66,6 +66,18 @@ export class DashboardSearchComponent implements OnInit {
 
   onFocus() {
     this.isDropdownVisible.set(true);
+  }
+
+  onTagChange(event: Event, tag: DashboardTags) {
+    const checkbox = event.target as HTMLInputElement;
+    const activeTags = this.form.value.activeTags;
+    if (checkbox.checked) {
+      activeTags?.push(tag.name);
+    } else {
+      activeTags?.splice(activeTags.indexOf(tag.name), 1);
+    }
+
+    console.log(this.form.value.activeTags);
   }
 
   @HostListener('document:click', ['$event'])

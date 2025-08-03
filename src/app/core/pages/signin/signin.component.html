@@ -2,8 +2,8 @@
   <div class="container mx-auto h-screen flex items-center justify-center">
     <div class="card card-body card-border bg-base-100 max-w-xl">
       <div class="flex flex-col gap-2 items-center mb-4 card-title">
-        <h1 class="text-4xl font-bold">Login</h1>
-        <p>Login to your account to get started with Mind Map.</p>
+        <h1 class="text-4xl font-bold">Sign in</h1>
+        <p>Sign in to your account to get started with Mind Map.</p>
       </div>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -42,7 +42,7 @@
             >
               @if (isLoading()) {
               <span class="loading loading-spinner loading-md"></span>
-              } @else { Login }
+              } @else { Sign in }
             </button>
           </div>
         </div>

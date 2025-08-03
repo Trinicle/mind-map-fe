@@ -1,20 +1,20 @@
 <div class="w-full card border-1 border-base-300 bg-base-100 h-56 btn-card">
-  <div class="card-body p-4">
+  <div class="card-body p-4" (click)="onCardClick()">
     <div class="flex flex-col gap-1.5 mb-3">
-      <div class="card-title">{{ card()?.title }}</div>
+      <div class="card-title">{{ card().title }}</div>
       <div class="flex gap-2 overflow-x-scroll no-scrollbar">
-        @for (tag of card()?.tags; track tag) {
+        @for (tag of card().tags; track tag) {
         <div class="badge badge-primary">{{ tag }}</div>
         }
       </div>
     </div>
     <div class="h-full mb-1">
       <p>
-        {{ card()?.description }}
+        {{ card().description }}
       </p>
     </div>
     <div class="ml-auto right-0 text-xs text-base-content/50">
-      {{ card()?.date }}
+      {{ card().date }}
     </div>
   </div>
 </div>

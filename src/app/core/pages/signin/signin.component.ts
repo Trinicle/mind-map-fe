@@ -1,10 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { LoginRequest } from '../../auth/auth-model';
 import { AuthService } from '../../auth/auth.service';
+import { SigninRequest } from '../../auth/auth-model';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-signin',
   imports: [ReactiveFormsModule],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.css',
@@ -23,9 +23,9 @@ export class SigninComponent {
     if (!email || !password) {
       return;
     }
-    const request: LoginRequest = { email, password };
+    const request: SigninRequest = { email, password };
     this.isLoading.set(true);
-    this.authService.login(request).subscribe({
+    this.authService.signin(request).subscribe({
       complete: () => {
         this.isLoading.set(false);
       },

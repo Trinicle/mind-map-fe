@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 export interface DashboardCardPostRequest {
   title: string;
   description: string;
@@ -34,5 +32,6 @@ export interface DashboardTagsResponse {
 }
 
 export interface DashboardTags {
+  id: string;
   name: string;
 }

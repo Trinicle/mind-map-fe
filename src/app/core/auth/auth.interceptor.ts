@@ -7,6 +7,7 @@ const AUTH_ENDPOINTS = [
   getApiUrl('/auth/signin'),
   getApiUrl('/auth/signup'),
   getApiUrl('/auth/signout'),
+  getApiUrl('/auth/refresh'),
 ];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {

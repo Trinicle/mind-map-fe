@@ -5,6 +5,7 @@ import { authGuard } from './core/auth/auth.guard';
 import { SigninComponent } from './core/pages/signin/signin.component';
 import { SignupComponent } from './core/pages/signup/signup.component';
 import { ChatComponent } from './modules/chat/chat.component';
+import { MindMapComponent } from './modules/mindmap/mindmap.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,11 @@ export const routes: Routes = [
     path: 'dashboard',
     canActivate: [authGuard],
     component: DashboardComponent,
+  },
+  {
+    path: 'map/:id',
+    canActivate: [authGuard],
+    component: MindMapComponent,
   },
   {
     path: 'chat',

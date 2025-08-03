@@ -1,5 +1,6 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { DashboardCard } from '../dashboard-models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-card',
@@ -8,5 +9,10 @@ import { DashboardCard } from '../dashboard-models';
   styleUrl: './dashboard-card.component.css',
 })
 export class DashboardCardComponent {
-  public readonly card = input<DashboardCard>();
+  public readonly card = input.required<DashboardCard>();
+  public readonly router = inject(Router);
+
+  onCardClick() {
+    this.router.navigate(['/map', this.card().id]);
+  }
 }

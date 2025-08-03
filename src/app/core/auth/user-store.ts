@@ -37,9 +37,13 @@ export const UserStore = signalStore(
 
       const user = store.user();
       if (user) {
-        user.accessToken = accessToken;
-        user.refreshToken = refreshToken;
-        patchState(store, { user });
+        const updatedUser = {
+          ...user,
+          accessToken,
+          refreshToken,
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser));
+        patchState(store, { user: updatedUser });
       }
     },
     clearUser() {
