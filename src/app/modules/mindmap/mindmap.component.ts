@@ -1,11 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DashboardService } from '../dashboard/dashboard.service';
 import { MindMapService } from './mindmap.service';
+import { OverviewComponent } from './overview/overview.component';
+import { NetworkComponent } from './network/network.component';
 
 @Component({
   selector: 'app-map',
-  imports: [],
+  imports: [OverviewComponent, NetworkComponent],
   providers: [MindMapService],
   templateUrl: './mindmap.component.html',
   styleUrl: './mindmap.component.css',

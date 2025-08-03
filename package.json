@@ -36,6 +36,7 @@
     "@ngrx/store-devtools": "^20.0.0",
     "@supabase/supabase-js": "^2.52.1",
     "@tailwindcss/postcss": "^4.1.11",
+    "cytoscape": "^3.33.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
