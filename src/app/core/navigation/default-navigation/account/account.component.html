@@ -22,6 +22,10 @@
         Settings
       </a>
     </li>
+    <div class="px-2 py-1 flex gap-2">
+      <input name="theme" type="checkbox" (click)="onThemeToggle()" [value]="theme()" class="toggle theme-controller rounded-full before:rounded-full" />
+      <p>{{ themeStore.isDarkTheme() ? 'Dark Mode' : 'Light Mode' }}</p>
+    </div>
     <div class="divider m-0"></div>
     <li>
       <a (click)="onSignOutClick()">

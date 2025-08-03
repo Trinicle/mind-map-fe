@@ -1,16 +1,22 @@
 <div class="bg-base-100 h-full">
-  <div class="p-6 flex flex-col gap-4 h-full">
-    <div>
-      <h1 class="text-4xl font-bold">Overview Title</h1>
+  @if (!isLoading()) {
+    <div class="p-6 flex flex-col gap-4 h-full">
+      <div>
+        <h1 class="text-4xl font-bold">{{ title() }}</h1>
+      </div>
+      <div class="flex gap-2 overflow-x-scroll no-scrollbar h-8">
+        @for (tag of tags(); track tag) {
+          <div class="badge badge-primary">{{ tag }}</div>
+        }
+      </div>
+      <div class="min-h-6 max-h-36 overflow-auto">
+        <p>{{ description()}}</p>
+      </div>
+      <div class="h-full">
+        <textarea type="text" class="textarea textarea-bordered w-full h-full bg-base-300" placeholder="Enter your text here...">{{ transcript() }}</textarea>
+      </div>    
     </div>
-    <div class="flex gap-2 overflow-x-scroll no-scrollbar h-8">
-      <div class="badge badge-primary">Primary</div>
-    </div>
-    <div class="h-36 max-h-36 overflow-auto">
-      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi id magnam impedit eligendi incidunt iusto doloremque veritatis. Atque dolorum enim explicabo neque omnis qui blanditiis harum? Voluptatum repellat corrupti illum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. In adipisci aliquam, alias sequi, molestiae sapiente ullam nesciunt esse maiores itaque, reprehenderit nihil quia dolor aut dolorem. Expedita sint maiores iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet similique, voluptate placeat dolores, nobis porro distinctio adipisci omnis reprehenderit veritatis molestias. Illum ea voluptatibus id recusandae tempore maxime dolore soluta. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur quas aut magni architecto reiciendis dolor illum, maiores natus, sapiente id dolore fuga ipsum odit quo alias. Alias dolores reiciendis id. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, voluptatem cumque. Dolor, sint voluptas? Ratione neque possimus aliquid, aperiam laudantium laborum illum veniam maiores asperiores harum voluptas commodi sunt provident?</p>
-    </div>
-    <div class="h-full">
-      <textarea type="text" class="textarea textarea-bordered w-full h-full bg-base-300" placeholder="Enter your text here..."></textarea>
-    </div>
-  </div>
+  } @else {
+    <app-overview-skeleton />
+  }
 </div>

@@ -1,7 +1,15 @@
-<div #cyContainer class="h-full w-full">
-
-<dialog #modal class="modal">
+@if (!isLoading()) {
+  <div #cyContainer class="h-full w-full"></div>
+} @else {
+  <div class="h-full w-full flex justify-center items-center">
+    <span class="loading loading-spinner w-40"></span>
+  </div>
+}
+<dialog #dialog class="modal">
   <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
     <h3 class="font-bold text-lg">Hello!</h3>
     <p class="py-4">Press ESC key or click the button below to close</p>
     <div class="modal-action">
