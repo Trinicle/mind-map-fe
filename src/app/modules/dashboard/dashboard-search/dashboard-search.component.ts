@@ -1,16 +1,16 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
   HostListener,
   inject,
   OnInit,
-  resource,
   signal,
   viewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { DashboardCardSearchRequest, DashboardTags } from '../dashboard-models';
+import { DashboardCardSearchRequest, DashboardTags } from '../dashboard-store';
 import { CommonModule } from '@angular/common';
 import { DashboardService } from '../dashboard.service';
 
@@ -19,6 +19,7 @@ import { DashboardService } from '../dashboard.service';
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './dashboard-search.component.html',
   styleUrl: './dashboard-search.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardSearchComponent implements OnInit {
   readonly dashboardService = inject(DashboardService);

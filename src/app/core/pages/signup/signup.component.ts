@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service';
 import { SignupRequest } from '../../auth/auth-model';
@@ -9,6 +14,7 @@ import { SignupRequest } from '../../auth/auth-model';
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignupComponent {
   private readonly authService = inject(AuthService);

@@ -1,4 +1,10 @@
-import { Component, ElementRef, signal, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { provideIcons } from '@ng-icons/core';
 import { NgIconComponent } from '@ng-icons/core';
 import { tdesignArrowUp, tdesignPlus } from '@ng-icons/tdesign-icons';
@@ -9,6 +15,7 @@ import { tdesignArrowUp, tdesignPlus } from '@ng-icons/tdesign-icons';
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css',
   providers: [provideIcons({ tdesignPlus, tdesignArrowUp })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatComponent {
   onInput(event: Event) {

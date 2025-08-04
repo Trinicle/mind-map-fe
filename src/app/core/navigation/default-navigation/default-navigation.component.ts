@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AccountComponent } from './account/account.component';
 
@@ -15,6 +15,7 @@ interface NavigationRoute {
   imports: [CommonModule, RouterModule, AccountComponent],
   templateUrl: './default-navigation.component.html',
   styleUrl: './default-navigation.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DefaultNavigationComponent {
   private readonly router = inject(Router);

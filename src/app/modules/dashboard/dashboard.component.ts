@@ -1,10 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { UserStore } from '../../core/auth/user-store';
 import { DashboardCardEmptyComponent } from './dashboard-card-empty/dashboard-card-empty.component';
 import { DashboardCardSkeletonComponent } from './dashboard-card-skeleton/dashboard-card-skeleton.component';
 import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
-import { DashboardCardCollectionStore } from './dashboard-store';
+import { DashboardStore } from './dashboard-store';
 import { DashboardService } from './dashboard.service';
 import { DashboardSearchComponent } from './dashboard-search/dashboard-search.component';
 
@@ -17,17 +22,22 @@ import { DashboardSearchComponent } from './dashboard-search/dashboard-search.co
     DashboardSearchComponent,
     CommonModule,
   ],
-  providers: [DashboardService],
+  providers: [DashboardService, DashboardStore],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent implements OnInit {
-  protected readonly cardsStore = inject(DashboardCardCollectionStore);
+  protected readonly dashboardStore = inject(DashboardStore);
   protected readonly userStore = inject(UserStore);
   private readonly dashboardService = inject(DashboardService);
 
+  readonly cards = this.dashboardStore.entities;
+  readonly isLoading = this.dashboardStore.isLoading;
+  readonly currentCreation = this.dashboardStore.currentCreation;
+
   ngOnInit(): void {
-    if (this.cardsStore.cards().length === 0) {
+    if (this.cards().length === 0) {
       this.dashboardService.getCards().subscribe();
     }
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -20,6 +20,7 @@ import { heroMagnifyingGlass } from '@ng-icons/heroicons/outline';
   ],
   templateUrl: './welcome.component.html',
   styleUrl: './welcome.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WelcomeComponent {
   features = [

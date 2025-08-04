@@ -6,32 +6,31 @@ import {
   viewChild,
   effect,
   OnDestroy,
-  signal,
+  ChangeDetectionStrategy,
+  input,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NetworkService } from './network.service';
-import { TopicStore } from './topics-store';
 import { ThemeStore } from '../../../core/theme/theme-store';
-import { switchMap } from 'rxjs';
-import cytoscape, { ElementDefinition, Core } from 'cytoscape';
+import cytoscape, { Core } from 'cytoscape';
+import { NetworkStore } from '../network-store';
 
 @Component({
   selector: 'app-network',
   imports: [],
-  providers: [NetworkService, TopicStore],
+  providers: [],
   templateUrl: './network.component.html',
   styleUrl: './network.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NetworkComponent implements OnInit, OnDestroy {
+export class NetworkComponent implements OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly networkService = inject(NetworkService);
-  private readonly topicStore = inject(TopicStore);
+  private readonly topicStore = inject(NetworkStore);
   private readonly themeStore = inject(ThemeStore);
   readonly container = viewChild<ElementRef>('cyContainer');
 
-  isLoading = this.topicStore.isLoading;
-  topics = this.topicStore.topics;
+  readonly data = this.topicStore.data;
+  readonly isLoading = this.topicStore.isLoading;
 
   private cy: Core | null = null;
 
@@ -44,15 +43,10 @@ export class NetworkComponent implements OnInit, OnDestroy {
     });
 
     effect(() => {
-      if (!this.isLoading()) {
+      if (!!this.container()) {
         this.createGraph();
       }
     });
-  }
-
-  ngOnInit(): void {
-    const mindmapId = this.route.parent?.snapshot.params['id'];
-    this.networkService.getTopics(mindmapId).subscribe();
   }
 
   ngOnDestroy(): void {
@@ -62,57 +56,16 @@ export class NetworkComponent implements OnInit, OnDestroy {
   }
 
   private createGraph() {
-    const data: ElementDefinition[] = [];
-
-    this.topics().forEach((topic) => {
-      const node = {
-        data: {
-          id: topic.id,
-          label: topic.title,
-        },
-      };
-
-      data.push(node);
-    });
-
-    const edges = new Set<string>();
-
-    this.topics().forEach((topic) => {
-      const title = topic.title;
-      const connectedTopics = topic.connectedTopics;
-
-      connectedTopics.forEach((connectedTopic) => {
-        if (
-          edges.has(`${title}-${connectedTopic}`) ||
-          edges.has(`${connectedTopic}-${title}`)
-        ) {
-          return;
-        }
-
-        const edge = {
-          data: {
-            id: `${title}-${connectedTopic}`,
-            source: this.topicStore.getConnectedTopicId(title),
-            target: this.topicStore.getConnectedTopicId(connectedTopic),
-          },
-        };
-
-        data.push(edge);
-        edges.add(`${title}-${connectedTopic}`);
-      });
-    });
-
     const isDarkTheme = this.themeStore.isDarkTheme();
-
     this.cy = cytoscape({
       container: this.container()?.nativeElement,
-      elements: data,
+      elements: this.data(),
       layout: { name: 'cose' },
       style: this.getGraphStyle(isDarkTheme),
     });
 
     this.cy.on('layoutstop', () => {
-      this.cy!.zoom(4);
+      this.cy!.zoom(3);
       this.cy!.center();
     });
 

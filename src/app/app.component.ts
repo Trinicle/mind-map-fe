@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { interval, startWith, switchMap } from 'rxjs';
 import { AuthService } from './core/auth/auth.service';
@@ -10,6 +16,7 @@ import { ToastComponent } from './core/toast/toast.component';
   imports: [RouterOutlet, NavigationComponent, ToastComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
   private readonly auth = inject(AuthService);

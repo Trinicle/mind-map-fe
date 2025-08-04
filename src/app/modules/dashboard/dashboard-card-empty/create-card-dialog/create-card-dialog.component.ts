@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   inject,
@@ -9,7 +10,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroXMark } from '@ng-icons/heroicons/outline';
 import { DashboardService } from '../../dashboard.service';
-import { DashboardCardPostRequest } from '../../dashboard-models';
+import { DashboardCardPostRequest } from '../../dashboard-store';
 
 @Component({
   selector: 'app-create-card-dialog',
@@ -17,6 +18,7 @@ import { DashboardCardPostRequest } from '../../dashboard-models';
   templateUrl: './create-card-dialog.component.html',
   styleUrl: './create-card-dialog.component.css',
   providers: [provideIcons({ heroXMark })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateCardDialogComponent {
   private readonly dashboardService = inject(DashboardService);

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OverviewService } from './overview.service';
 import { MindMapStore } from './mindmap-store';
@@ -11,6 +11,7 @@ import { OverviewSkeletonComponent } from './overview-skeleton/overview-skeleton
   providers: [OverviewService, MindMapStore, TranscriptStore],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverviewComponent {
   private readonly route = inject(ActivatedRoute);

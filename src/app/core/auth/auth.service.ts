@@ -14,7 +14,6 @@ import { Router } from '@angular/router';
 import { Session, User } from '@supabase/supabase-js';
 import { UserModel, UserStore } from './user-store';
 import { ToastService } from '../toast/toast.service';
-import { DashboardCardCollectionStore } from '../../modules/dashboard/dashboard-store';
 
 interface AuthResponse {
   message: string;
@@ -46,7 +45,6 @@ export class AuthService {
   private readonly toast = inject(ToastService);
   private readonly router = inject(Router);
   private readonly userStore = inject(UserStore);
-  private readonly cardsStore = inject(DashboardCardCollectionStore);
 
   public signup(request: SignupRequest) {
     this.userStore.setIsLoading(true);
@@ -120,7 +118,7 @@ export class AuthService {
       }),
       tap(() => {
         this.router.navigate(['/welcome']);
-        this.clearStores();
+        this.userStore.clearUser();
       }),
       finalize(() => this.userStore.setIsLoading(false))
     );
@@ -154,10 +152,5 @@ export class AuthService {
           this.userStore.setIsLoading(false);
         })
       );
-  }
-
-  private clearStores() {
-    this.userStore.clearUser();
-    this.cardsStore.clearCards();
   }
 }

@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service';
 import { SigninRequest } from '../../auth/auth-model';
@@ -8,6 +13,7 @@ import { SigninRequest } from '../../auth/auth-model';
   imports: [ReactiveFormsModule],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SigninComponent {
   private readonly authService = inject(AuthService);

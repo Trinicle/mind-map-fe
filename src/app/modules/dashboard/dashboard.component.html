@@ -10,8 +10,8 @@
         </div>
         <app-dashboard-search />
       </div>
-      <div class="grid grid-cols-[repeat(auto-fit,215px)] gap-8">
-        @if (cardsStore.isLoading()) {
+      <div class="grid grid-cols-[repeat(auto-fit,14rem)] gap-8">
+        @if (isLoading()) {
         <app-dashboard-card-skeleton />
         <app-dashboard-card-skeleton />
         <app-dashboard-card-skeleton />
@@ -24,12 +24,12 @@
         <app-dashboard-card-skeleton />
         <app-dashboard-card-skeleton />
         <app-dashboard-card-skeleton />
-        } @else { @for (card of cardsStore.cards(); track card.id) {
-        <app-dashboard-card [card]="card" />
-        } @if (!cardsStore.currentCreation()) {
+        } @else { @if (!currentCreation()) {
         <app-dashboard-card-empty />
         } @else {
         <app-dashboard-card-skeleton />
+        } @for (card of cards(); track card.id) {
+        <app-dashboard-card [card]="card" />
         } }
       </div>
     </div>

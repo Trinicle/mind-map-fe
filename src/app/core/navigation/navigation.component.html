@@ -1,5 +1,5 @@
-@if (router.url === '/welcome') {
+@if (url() === '/welcome') {
 <app-welcome-navigation />
-} @else if (router.url === '/signin' || router.url === '/signup') { } @else {
+} @else if (url() === '/signin' || url() === '/signup') { } @else {
 <app-default-navigation />
 }

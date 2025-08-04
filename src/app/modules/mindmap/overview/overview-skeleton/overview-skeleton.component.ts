@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-overview-skeleton',
   imports: [],
   templateUrl: './overview-skeleton.component.html',
-  styleUrl: './overview-skeleton.component.css'
+  styleUrl: './overview-skeleton.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OverviewSkeletonComponent {
-
-}
+export class OverviewSkeletonComponent {}

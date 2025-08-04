@@ -1,6 +1,12 @@
-import { Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { DefaultNavigationComponent } from './default-navigation/default-navigation.component';
 import { WelcomeNavigationComponent } from './welcome-navigation/welcome-navigation.component';
 
@@ -14,7 +20,18 @@ import { WelcomeNavigationComponent } from './welcome-navigation/welcome-navigat
   ],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavigationComponent {
+export class NavigationComponent implements OnInit {
   protected readonly router = inject(Router);
+
+  readonly url = signal<string>(this.router.url);
+
+  ngOnInit(): void {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.url.set(event.url);
+      }
+    });
+  }
 }

@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { DashboardCardCollectionStore } from './dashboard-store';
 import { getApiUrl } from '../../shared/api/route';
-import { catchError, finalize, map, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiError } from '../../shared/types/api.types';
 import { ToastService } from '../../core/toast/toast.service';
 import {
@@ -11,7 +10,7 @@ import {
   DashboardCardSearchRequest,
   DashboardTags,
   DashboardTagsResponse,
-} from './dashboard-models';
+} from './dashboard-store';
 
 interface DashboardResponse {
   data: DashboardCard[];
@@ -26,25 +25,18 @@ interface DashboardCardResponse {
 @Injectable()
 export class DashboardService {
   private readonly http = inject(HttpClient);
-  private readonly cardsStore = inject(DashboardCardCollectionStore);
   private readonly toast = inject(ToastService);
 
-  getCards() {
-    this.cardsStore.setIsLoading(true);
-
+  getCards(): Observable<DashboardCard[]> {
     return this.http
       .get<DashboardResponse>(getApiUrl('/dashboard/mindmap'))
       .pipe(
         map((response) => {
-          const cards = response.data;
-          this.cardsStore.addCards(cards);
+          return response.data;
         }),
         catchError((error: ApiError) => {
           this.toast.show(error.message);
           return throwError(() => error);
-        }),
-        finalize(() => {
-          this.cardsStore.setIsLoading(false);
         })
       );
   }
@@ -62,8 +54,6 @@ export class DashboardService {
   }
 
   getFilteredCards(request: DashboardCardSearchRequest) {
-    this.cardsStore.setIsLoading(true);
-
     return this.http.get<DashboardResponse>(
       getApiUrl('/dashboard/mindmap/search'),
       {
@@ -76,8 +66,7 @@ export class DashboardService {
     );
   }
 
-  createCard(card: DashboardCardPostRequest) {
-    this.cardsStore.setCurrentCreation(true);
+  createCard(card: DashboardCardPostRequest): Observable<DashboardCard> {
     const formData = new FormData();
     formData.append('file', card.file);
     formData.append('title', card.title);
@@ -89,15 +78,11 @@ export class DashboardService {
       .post<DashboardCardResponse>(getApiUrl('/dashboard/mindmap'), formData)
       .pipe(
         map((response) => {
-          const card = response.data;
-          this.cardsStore.addCard(card);
+          return response.data;
         }),
         catchError((error: ApiError) => {
           this.toast.show(error.message);
           return throwError(() => error);
-        }),
-        finalize(() => {
-          this.cardsStore.setCurrentCreation(false);
         })
       );
   }

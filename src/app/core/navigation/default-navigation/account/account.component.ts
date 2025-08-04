@@ -1,4 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { NgIconComponent } from '@ng-icons/core';
 import { bootstrapGearFill } from '@ng-icons/bootstrap-icons';
 import { provideIcons } from '@ng-icons/core';
@@ -22,6 +27,7 @@ import { akarSun, akarMoon } from '@ng-icons/akar-icons';
       akarMoon,
     }),
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountComponent {
   protected readonly userStore = inject(UserStore);
