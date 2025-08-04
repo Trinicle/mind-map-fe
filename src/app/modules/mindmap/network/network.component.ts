@@ -6,8 +6,9 @@ import {
   viewChild,
   effect,
   OnDestroy,
+  signal,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NetworkService } from './network.service';
 import { TopicStore } from './topics-store';
 import { ThemeStore } from '../../../core/theme/theme-store';
@@ -23,11 +24,11 @@ import cytoscape, { ElementDefinition, Core } from 'cytoscape';
 })
 export class NetworkComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly networkService = inject(NetworkService);
   private readonly topicStore = inject(TopicStore);
   private readonly themeStore = inject(ThemeStore);
   readonly container = viewChild<ElementRef>('cyContainer');
-  readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
 
   isLoading = this.topicStore.isLoading;
   topics = this.topicStore.topics;
@@ -41,24 +42,17 @@ export class NetworkComponent implements OnInit, OnDestroy {
         this.updateGraphTheme(isDarkTheme);
       }
     });
+
+    effect(() => {
+      if (!this.isLoading()) {
+        this.createGraph();
+      }
+    });
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      const id = params['id'];
-      this.networkService.getTopics(id).subscribe();
-    });
-
-    this.route.params
-      .pipe(
-        switchMap((params) => {
-          const id = params['id'];
-          return this.networkService.getTopics(id);
-        })
-      )
-      .subscribe({
-        next: () => this.createGraph(),
-      });
+    const mindmapId = this.route.parent?.snapshot.params['id'];
+    this.networkService.getTopics(mindmapId).subscribe();
   }
 
   ngOnDestroy(): void {
@@ -123,7 +117,10 @@ export class NetworkComponent implements OnInit, OnDestroy {
     });
 
     this.cy.on('tap', 'node', (evt) => {
-      this.dialog().nativeElement.showModal();
+      const topicId = evt.target.data('id');
+      this.router.navigate(['topic', topicId], {
+        relativeTo: this.route.parent,
+      });
     });
   }
 

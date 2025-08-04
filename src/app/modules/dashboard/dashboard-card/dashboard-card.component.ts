@@ -13,6 +13,6 @@ export class DashboardCardComponent {
   public readonly router = inject(Router);
 
   onCardClick() {
-    this.router.navigate(['/map', this.card().id]);
+    this.router.navigate(['/map', this.card().id, 'network']);
   }
 }
