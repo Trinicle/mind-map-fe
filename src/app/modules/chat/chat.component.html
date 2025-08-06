@@ -4,7 +4,17 @@
       <app-conversations />
     </div>
     <div class="flex-1">
-      <app-chat-input />
+      <div class="flex flex-col max-w-[48rem] mx-auto h-full">
+        <div>
+          <router-outlet />
+        </div>
+        <div
+          class="absolute top-[40%] transition-all duration-300 ease-in-out"
+          [class.top-[85%]]="!inNewChat()"
+        >
+          <app-chat-input />
+        </div>
+      </div>
     </div>
   </div>
 </div>

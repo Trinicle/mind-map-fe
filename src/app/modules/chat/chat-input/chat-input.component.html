@@ -1,31 +1,24 @@
-<div class="max-w-[48rem] mx-auto">
-  <div>
-    <div class="mt-[25rem] mb-8">
-      <h1 class="text-4xl flex justify-center">Ask about a transcript...</h1>
+<div class="bg-base-100 rounded-3xl p-4 w-[48rem]">
+  <div
+    #inputDiv
+    contenteditable="true"
+    class="max-h-72 overflow-y-auto hover:outline-none focus:outline-none px-1.5 dark:before:text-slate-400 before:text-slate-500"
+    placeholder="Ask anything regarding a transcript..."
+    (input)="onInput($event)"
+    (keydown.enter)="onSubmit($event)"
+  ></div>
+  <div class="flex justify-between items-center mt-2">
+    <div class="tooltip tooltip-bottom" data-tip="Add a transcript for context">
+      <a class="btn btn-circle btn-ghost flex items-center">
+        <ng-icon name="tdesignPlus" size="30" />
+      </a>
     </div>
-    <div class="bg-base-100 rounded-3xl p-4">
-      <div
-        contenteditable="true"
-        class="w-full max-h-72 overflow-y-auto hover:outline-none focus:outline-none px-1.5 dark:before:text-slate-400 before:text-slate-500"
-        placeholder="Ask anything regarding a transcript..."
-        (input)="onInput($event)"
-      ></div>
-      <div class="flex justify-between items-center mt-2">
-        <div
-          class="tooltip tooltip-bottom"
-          data-tip="Add a transcript for context"
-        >
-          <a class="btn btn-circle btn-ghost flex items-center">
-            <ng-icon name="tdesignPlus" size="30" />
-          </a>
-        </div>
 
-        <a
-          class="btn btn-circle btn-ghost flex items-center bg-base-200 hover:border-0 hover:bg-base-300"
-        >
-          <ng-icon name="tdesignArrowUp" size="25" />
-        </a>
-      </div>
-    </div>
+    <a
+      class="btn btn-circle btn-ghost flex items-center bg-base-200 hover:border-0 hover:bg-base-300"
+      (click)="onSubmit()"
+    >
+      <ng-icon name="tdesignArrowUp" size="25" />
+    </a>
   </div>
 </div>

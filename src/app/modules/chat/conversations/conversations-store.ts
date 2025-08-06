@@ -7,13 +7,13 @@ import {
   withProps,
   withState,
 } from '@ngrx/signals';
-import { ChatService } from '../chat.service';
 import { finalize, map } from 'rxjs';
 import {
   prependEntity,
   setAllEntities,
   withEntities,
 } from '@ngrx/signals/entities';
+import { ChatService } from '../chat.service';
 
 export interface Conversation {
   id: string;
@@ -41,18 +41,9 @@ export const ConversationsStore = signalStore(
         .getConversations()
         .pipe(
           map((conversations) => {
-            const test: Conversation[] = [
-              {
-                id: '1',
-                userId: '1',
-                title: 'Test 1',
-                createdAt: new Date(),
-                updatedAt: new Date(),
-              },
-            ];
             patchState(
               store,
-              setAllEntities<Conversation>(test, {
+              setAllEntities<Conversation>(conversations, {
                 selectId: (conversation) => conversation.id,
               })
             );
@@ -74,6 +65,30 @@ export const ConversationsStore = signalStore(
           selectId: (conversation) => conversation.id,
         })
       );
+    },
+    createInitialConversation(text: string) {
+      patchState(store, {
+        isLoading: true,
+      });
+
+      chatService
+        .createConversation(text)
+        .pipe(
+          map((conversation) => {
+            patchState(
+              store,
+              prependEntity(conversation, {
+                selectId: (conversation) => conversation.id,
+              })
+            );
+          }),
+          finalize(() => {
+            patchState(store, {
+              isLoading: false,
+            });
+          })
+        )
+        .subscribe();
     },
   }))
 );

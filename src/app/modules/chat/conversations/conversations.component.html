@@ -13,7 +13,7 @@
           <ng-icon
             name="tdesignArrowRight"
             size="25"
-            class="transition-opacity duration-500"
+            class="transition-opacity duration-300"
             [class.opacity-0]="!minimized()"
             [class.opacity-100]="minimized()"
           />
@@ -21,15 +21,25 @@
       </div>
       <div>
         <div>
-          <a class="btn btn-square btn-ghost m-1" (click)="onMinimize()">
-            <ng-icon name="tdesignPlus" size="30" />
+          <a class="btn btn-square btn-ghost m-1" (click)="onNewChat()">
+            <ng-icon
+              name="tdesignPlus"
+              size="30"
+              [class.opacity-0]="!minimized()"
+              [class.opacity-100]="minimized()"
+            />
           </a>
         </div>
       </div>
       <div>
         <div>
-          <a class="btn btn-square btn-ghost m-1" (click)="onMinimize()">
-            <ng-icon name="tdesignSearch" size="25" />
+          <a class="btn btn-square btn-ghost m-1">
+            <ng-icon
+              name="tdesignSearch"
+              size="25"
+              [class.opacity-0]="!minimized()"
+              [class.opacity-100]="minimized()"
+            />
           </a>
         </div>
       </div>
@@ -44,16 +54,21 @@
           <ng-icon
             name="tdesignArrowLeft"
             size="25"
-            class="transition-opacity duration-500"
+            class="transition-opacity duration-300"
             [class.opacity-0]="minimized()"
             [class.opacity-100]="!minimized()"
           />
         </a>
       </div>
       <div class="m-1">
-        <a class="btn btn-ghost pl-1 btn-default">
+        <a class="btn btn-ghost pl-1 btn-default" (click)="onNewChat()">
           <div class="flex items-center text-center gap-2">
-            <ng-icon name="tdesignPlus" size="30" class="hidden" />
+            <ng-icon
+              name="tdesignPlus"
+              size="30"
+              [class.opacity-0]="minimized()"
+              [class.opacity-100]="!minimized()"
+            />
             <p
               class="text-sm w-max transition-opacity duration-300"
               [class.opacity-0]="minimized()"
@@ -67,7 +82,12 @@
       <div class="m-1">
         <a class="btn btn-ghost btn-default pl-1.75">
           <div class="flex items-center text-center gap-2">
-            <ng-icon name="tdesignSearch" size="25" class="hidden" />
+            <ng-icon
+              name="tdesignSearch"
+              size="25"
+              [class.opacity-0]="minimized()"
+              [class.opacity-100]="!minimized()"
+            />
             <p
               class="text-sm w-max transition-opacity duration-300"
               [class.opacity-0]="minimized()"
@@ -84,20 +104,16 @@
           [class.opacity-0]="minimized()"
           [class.opacity-100]="!minimized()"
         >
-          <div class="m-4">
-            <p class="text-base-content/50 text-sm">Chat History</p>
-          </div>
-
           <ul class="flex flex-col">
-            @if (conversationsLength() == 0 && !isLoading()) {
-            <li class="mx-4">
-              <p class="text-sm text-base-content">No conversations found!</p>
-            </li>
-            } @if (isLoading()) {
+            @if (isLoading()) {
             <app-conversation-skeleton-list-element />
-            } @for (conversation of conversations(); track conversation.id) {
+            } @if (conversationsLength() > 0) {
+            <div class="m-4">
+              <p class="text-base-content/50 text-sm">Chat History</p>
+            </div>
+            @for (conversation of conversations(); track conversation.id) {
             <app-conversation-list-element [conversation]="conversation" />
-            }
+            } }
           </ul>
         </div>
       </div>
