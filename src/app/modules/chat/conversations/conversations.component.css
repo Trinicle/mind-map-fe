@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+div.expanded {
+  @apply w-72;
+}
+
+div.minimized {
+  @apply w-12; 
+}
+
+
+.btn-default {
+  @apply w-full justify-start ;
+}

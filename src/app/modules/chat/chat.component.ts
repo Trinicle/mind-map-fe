@@ -5,30 +5,14 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { provideIcons } from '@ng-icons/core';
-import { NgIconComponent } from '@ng-icons/core';
-import { tdesignArrowUp, tdesignPlus } from '@ng-icons/tdesign-icons';
+import { ChatInputComponent } from './chat-input/chat-input.component';
+import { ConversationsComponent } from './conversations/conversations.component';
 
 @Component({
   selector: 'app-chat',
-  imports: [NgIconComponent],
+  imports: [ChatInputComponent, ConversationsComponent],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css',
-  providers: [provideIcons({ tdesignPlus, tdesignArrowUp })],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatComponent {
-  onInput(event: Event) {
-    const div = event.target as HTMLDivElement;
-
-    console.log(div.innerHTML);
-    if (
-      div.innerHTML === '<p></p>' ||
-      div.innerHTML === '<p><br></p>' ||
-      div.innerHTML === '<br>' ||
-      div.innerHTML === '<div><br></div>'
-    ) {
-      div.innerHTML = '';
-    }
-  }
-}
+export class ChatComponent {}

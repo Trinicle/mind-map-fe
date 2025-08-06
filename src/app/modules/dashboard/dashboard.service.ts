@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { getApiUrl } from '../../shared/api/route';
+import { getApiUrl, Response } from '../../shared/api/route';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { ApiError } from '../../shared/types/api.types';
 import { ToastService } from '../../core/toast/toast.service';
@@ -12,15 +12,9 @@ import {
   DashboardTagsResponse,
 } from './dashboard-store';
 
-interface DashboardResponse {
-  data: DashboardCard[];
-  message: string;
-}
+interface DashboardResponse extends Response<DashboardCard[]> {}
 
-interface DashboardCardResponse {
-  data: DashboardCard;
-  message: string;
-}
+interface DashboardCardResponse extends Response<DashboardCard> {}
 
 @Injectable()
 export class DashboardService {
