@@ -31,10 +31,9 @@ export const MessagesStore = signalStore(
   }),
   withProps(() => ({
     chatService: inject(ChatService),
-    conversationStore: inject(ConversationsStore),
     route: inject(ActivatedRoute),
   })),
-  withHooks(({ chatService, conversationStore, route, ...store }) => ({
+  withHooks(({ chatService, route, ...store }) => ({
     onInit() {
       const conversationId = route.snapshot.params['id'];
 
@@ -63,11 +62,14 @@ export const MessagesStore = signalStore(
         .subscribe();
     },
   })),
-  withMethods(({ chatService, conversationStore, route, ...store }) => ({
+  withMethods(({ chatService, route, ...store }) => ({
     addMessage(message: string) {
       patchState(store, {
         initialSentMessage: message,
       });
+
+      const conversationId = route.snapshot.params['id'];
+      chatService.sendMessage(conversationId, message);
     },
   }))
 );
