@@ -33,8 +33,6 @@ export class ChatInputComponent {
   private readonly inputDiv =
     viewChild.required<ElementRef<HTMLDivElement>>('inputDiv');
 
-  readonly messages = this.messagesStore.entities;
-
   onInput(event: Event) {
     const div = event.target as HTMLDivElement;
     if (
@@ -54,8 +52,7 @@ export class ChatInputComponent {
       event.preventDefault();
     }
     const text = this.inputDiv().nativeElement.innerText;
-
-    const id = this.route.snapshot.params['id'];
+    const id = this.route.snapshot.firstChild?.params['id'];
 
     if (!id) {
       this.conversationStore

@@ -10,6 +10,7 @@ import {
 import {
   addEntity,
   setAllEntities,
+  updateEntity,
   withEntities,
 } from '@ngrx/signals/entities';
 import { ActivatedRoute } from '@angular/router';
@@ -29,18 +30,59 @@ export const MessagesStore = signalStore(
   withEntities<Message>(),
   withState({
     isLoading: false,
-    initialSentMessage: '',
   }),
   withProps(() => ({
     chatService: inject(ChatService),
     route: inject(ActivatedRoute),
   })),
-  withHooks(({ chatService, route, ...store }) => ({
-    onInit() {
-      const conversationId = route.snapshot.params['id'];
 
-      if (!conversationId) return;
+  withMethods(({ chatService, route, ...store }) => ({
+    addMessage(message: string, conversationId: string) {
+      const humanMessage: Message = {
+        id: 'temporary-id',
+        type: 'human',
+        message: message,
+      };
+      patchState(
+        store,
+        addEntity(humanMessage, {
+          selectId: (message) => message.id,
+        })
+      );
 
+      chatService
+        .sendMessage(conversationId, message)
+        .pipe(
+          map((message) => {
+            const [sentMessage, aiMessage] = message;
+            patchState(
+              store,
+              updateEntity({
+                id: humanMessage.id,
+                changes: {
+                  id: sentMessage.id,
+                },
+              })
+            );
+            patchState(
+              store,
+              addEntity(aiMessage, {
+                selectId: (message) => message.id,
+              })
+            );
+          }),
+          finalize(() => {
+            patchState(store, {
+              isLoading: false,
+            });
+          })
+        )
+        .subscribe();
+    },
+    loadMessages(conversationId: string) {
+      patchState(store, {
+        isLoading: true,
+      });
       patchState(store, {
         isLoading: true,
       });
@@ -65,30 +107,13 @@ export const MessagesStore = signalStore(
         .subscribe();
     },
   })),
-  withMethods(({ chatService, route, ...store }) => ({
-    addMessage(message: string, conversationId: string) {
-      patchState(store, {
-        initialSentMessage: message,
-      });
+  withHooks(({ chatService, route, ...store }) => ({
+    onInit() {
+      const conversationId = route.snapshot.params['id'];
 
-      chatService
-        .sendMessage(conversationId, message)
-        .pipe(
-          map((message) => {
-            patchState(
-              store,
-              addEntity(message, {
-                selectId: (message) => message.id,
-              })
-            );
-          }),
-          finalize(() => {
-            patchState(store, {
-              isLoading: false,
-            });
-          })
-        )
-        .subscribe();
+      if (!conversationId) return;
+
+      store.loadMessages(conversationId);
     },
   }))
 );

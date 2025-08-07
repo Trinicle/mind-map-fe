@@ -1,9 +1,10 @@
 import { Component, input } from '@angular/core';
 import { Conversation } from '../conversations-store';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-conversation-list-element',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './conversation-list-element.component.html',
   styleUrl: './conversation-list-element.component.css',
 })

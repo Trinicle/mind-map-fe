@@ -34,7 +34,7 @@ interface MessagePython {
   sources?: string[];
 }
 
-interface MessagePythonResponse extends Response<MessagePython> {}
+interface MessagePythonResponseList extends Response<MessagePython[]> {}
 
 interface ConversationResponse extends Response<Conversation[]> {}
 
@@ -58,7 +58,25 @@ export class ChatService {
   }
 
   getConversationHistory(conversationId: string): Observable<Message[]> {
-    return of([]);
+    return this.http
+      .get<MessagePythonResponseList>(
+        getApiUrl(`/conversations/${conversationId}/history`)
+      )
+      .pipe(
+        map((response) => {
+          const data = response.data;
+          const messages: Message[] = data.map((message) => ({
+            id: message.id,
+            type: message.type,
+            message: message.message,
+          }));
+          return messages;
+        }),
+        catchError((error: ApiError) => {
+          this.toast.show(error.message);
+          return throwError(() => error);
+        })
+      );
   }
 
   createConversation(transcriptId?: string) {
@@ -93,16 +111,23 @@ export class ChatService {
       message: text,
     };
     return this.http
-      .post<MessagePythonResponse>(getApiUrl('/chat'), request)
+      .post<MessagePythonResponseList>(getApiUrl('/chat'), request)
       .pipe(
         map((response) => {
           const data = response.data;
-          const message: Message = {
-            id: data.id,
-            type: data.type,
-            message: data.message,
+          const sentMessage = data[0];
+          const aiMessage = data[1];
+          const sentMessageMapped: Message = {
+            id: sentMessage.id,
+            type: sentMessage.type,
+            message: sentMessage.message,
           };
-          return message;
+          const aiMessageMapped: Message = {
+            id: sentMessage.id,
+            type: sentMessage.type,
+            message: sentMessage.message,
+          };
+          return [sentMessageMapped, aiMessageMapped];
         }),
         catchError((error: ApiError) => {
           this.toast.show(error.message);

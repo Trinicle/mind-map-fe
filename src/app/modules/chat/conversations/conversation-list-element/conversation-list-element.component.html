@@ -1,5 +1,7 @@
 <li class="mx-2">
-  <a class="btn btn-sm btn-ghost text-base py-1 justify-start w-full">{{
-    conversation().title
-  }}</a>
+  <a
+    class="btn btn-sm btn-ghost text-base py-1 justify-start w-full"
+    [routerLink]="['/chat', conversation().id]"
+    >{{ conversation().title }}</a
+  >
 </li>
