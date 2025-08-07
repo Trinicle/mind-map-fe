@@ -66,29 +66,27 @@ export const ConversationsStore = signalStore(
         })
       );
     },
-    createInitialConversation(text: string) {
+    createInitialConversation(transcriptId?: string) {
       patchState(store, {
         isLoading: true,
       });
 
-      chatService
-        .createConversation(text)
-        .pipe(
-          map((conversation) => {
-            patchState(
-              store,
-              prependEntity(conversation, {
-                selectId: (conversation) => conversation.id,
-              })
-            );
-          }),
-          finalize(() => {
-            patchState(store, {
-              isLoading: false,
-            });
-          })
-        )
-        .subscribe();
+      return chatService.createConversation(transcriptId).pipe(
+        map((conversation) => {
+          patchState(
+            store,
+            prependEntity(conversation, {
+              selectId: (conversation) => conversation.id,
+            })
+          );
+          return conversation;
+        }),
+        finalize(() => {
+          patchState(store, {
+            isLoading: false,
+          });
+        })
+      );
     },
   }))
 );

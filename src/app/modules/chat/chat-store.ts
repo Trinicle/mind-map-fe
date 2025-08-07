@@ -7,18 +7,20 @@ import {
   withProps,
   withState,
 } from '@ngrx/signals';
-import { setAllEntities, withEntities } from '@ngrx/signals/entities';
-import { ConversationsStore } from './conversations/conversations-store';
+import {
+  addEntity,
+  setAllEntities,
+  withEntities,
+} from '@ngrx/signals/entities';
 import { ActivatedRoute } from '@angular/router';
 import { ChatService } from './chat.service';
-import { addEntity } from '@ngrx/signals/entities';
 import { finalize, map } from 'rxjs';
 
-export type ChatUser = 'llm' | 'user';
+export type MessageType = 'system' | 'ai' | 'human' | 'tool';
 
 export interface Message {
   id: string;
-  from: ChatUser;
+  type: MessageType;
   message: string;
   sources?: string[];
 }
@@ -38,6 +40,7 @@ export const MessagesStore = signalStore(
       const conversationId = route.snapshot.params['id'];
 
       if (!conversationId) return;
+
       patchState(store, {
         isLoading: true,
       });
@@ -63,13 +66,29 @@ export const MessagesStore = signalStore(
     },
   })),
   withMethods(({ chatService, route, ...store }) => ({
-    addMessage(message: string) {
+    addMessage(message: string, conversationId: string) {
       patchState(store, {
         initialSentMessage: message,
       });
 
-      const conversationId = route.snapshot.params['id'];
-      chatService.sendMessage(conversationId, message);
+      chatService
+        .sendMessage(conversationId, message)
+        .pipe(
+          map((message) => {
+            patchState(
+              store,
+              addEntity(message, {
+                selectId: (message) => message.id,
+              })
+            );
+          }),
+          finalize(() => {
+            patchState(store, {
+              isLoading: false,
+            });
+          })
+        )
+        .subscribe();
     },
   }))
 );

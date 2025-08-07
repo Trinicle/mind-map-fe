@@ -5,18 +5,38 @@ import { Observable, map, catchError, throwError, of } from 'rxjs';
 import { getApiUrl, Response } from '../../shared/api/route';
 import { ApiError } from '../../shared/types/api.types';
 import { Conversation } from './conversations/conversations-store';
-import { Message } from './chat-store';
+import { Message, MessageType } from './chat-store';
 
 interface ConversationCreateRequest {
-  transcriptId?: string;
-  initial_message: string;
+  transcript_id?: string;
 }
 
-interface ConversationCreateResponse extends Response<Conversation> {}
+interface ConversationPython {
+  id: string;
+  user_id: string;
+  transcript_id?: string;
+  title: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface ConversationPythonResponse extends Response<ConversationPython> {}
+
+interface MessageCreateRequest {
+  conversation_id: string;
+  message: string;
+}
+
+interface MessagePython {
+  id: string;
+  type: MessageType;
+  message: string;
+  sources?: string[];
+}
+
+interface MessagePythonResponse extends Response<MessagePython> {}
 
 interface ConversationResponse extends Response<Conversation[]> {}
-
-interface MessageResponse extends Response<Message> {}
 
 interface ConversationHistoryResponse extends Response<Message[]> {}
 
@@ -41,14 +61,25 @@ export class ChatService {
     return of([]);
   }
 
-  createConversation(text: string) {
+  createConversation(transcriptId?: string) {
     const request: ConversationCreateRequest = {
-      initial_message: text,
+      transcript_id: transcriptId,
     };
     return this.http
-      .post<ConversationCreateResponse>(getApiUrl('/conversations'), request)
+      .post<ConversationPythonResponse>(getApiUrl('/conversations'), request)
       .pipe(
-        map((response) => response.data),
+        map((response) => {
+          const data = response.data;
+          const conversation: Conversation = {
+            id: data.id,
+            userId: data.user_id,
+            transcriptId: data.transcript_id,
+            title: data.title,
+            createdAt: new Date(data.created_at),
+            updatedAt: new Date(data.updated_at),
+          };
+          return conversation;
+        }),
         catchError((error: ApiError) => {
           this.toast.show(error.message);
           return throwError(() => error);
@@ -56,7 +87,27 @@ export class ChatService {
       );
   }
 
-  sendMessage(conversationID: string, text: string) {
-    return this.http.post;
+  sendMessage(conversationId: string, text: string) {
+    const request: MessageCreateRequest = {
+      conversation_id: conversationId,
+      message: text,
+    };
+    return this.http
+      .post<MessagePythonResponse>(getApiUrl('/chat'), request)
+      .pipe(
+        map((response) => {
+          const data = response.data;
+          const message: Message = {
+            id: data.id,
+            type: data.type,
+            message: data.message,
+          };
+          return message;
+        }),
+        catchError((error: ApiError) => {
+          this.toast.show(error.message);
+          return throwError(() => error);
+        })
+      );
   }
 }

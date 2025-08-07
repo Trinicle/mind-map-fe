@@ -14,8 +14,6 @@ import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { tdesignPlus, tdesignArrowUp } from '@ng-icons/tdesign-icons';
 import { MessagesStore } from '../chat-store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter, map } from 'rxjs';
-import { ChatService } from '../chat.service';
 import { ConversationsStore } from '../conversations/conversations-store';
 
 @Component({
@@ -26,30 +24,16 @@ import { ConversationsStore } from '../conversations/conversations-store';
   styleUrl: './chat-input.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatInputComponent implements OnInit {
+export class ChatInputComponent {
   private readonly router = inject(Router);
   private readonly messagesStore = inject(MessagesStore);
   private readonly conversationStore = inject(ConversationsStore);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly chatService = inject(ChatService);
+  private readonly route = inject(ActivatedRoute);
   private readonly inputDiv =
     viewChild.required<ElementRef<HTMLDivElement>>('inputDiv');
 
-  readonly inNewConversation = signal<boolean>(true);
   readonly messages = this.messagesStore.entities;
-
-  ngOnInit(): void {
-    this.router.events
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        filter((event) => event instanceof NavigationEnd),
-        map((event) => event.url)
-      )
-      .subscribe((url) => {
-        const urls = url.split('/');
-        this.inNewConversation.set(urls.length === 2);
-      });
-  }
 
   onInput(event: Event) {
     const div = event.target as HTMLDivElement;
@@ -71,8 +55,24 @@ export class ChatInputComponent implements OnInit {
     }
     const text = this.inputDiv().nativeElement.innerText;
 
-    if (this.inNewConversation()) {
-      this.conversationStore.createInitialConversation(text);
+    const id = this.route.snapshot.params['id'];
+
+    if (!id) {
+      this.conversationStore
+        .createInitialConversation()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (conversation) => {
+            this.router.navigate(['/chat', conversation.id]).then(() => {
+              this.messagesStore.addMessage(text, conversation.id);
+            });
+          },
+          error: (error) => {
+            console.error('Failed to create conversation:', error);
+          },
+        });
+    } else {
+      this.messagesStore.addMessage(text, id);
     }
   }
 }
