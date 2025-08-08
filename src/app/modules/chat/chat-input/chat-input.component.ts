@@ -15,6 +15,7 @@ import { tdesignPlus, tdesignArrowUp } from '@ng-icons/tdesign-icons';
 import { MessagesStore } from '../chat-store';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConversationsStore } from '../conversations/conversations-store';
+import { ChatNavigationService } from '../chat-navigation.service';
 
 @Component({
   selector: 'app-chat-input',
@@ -30,6 +31,7 @@ export class ChatInputComponent {
   private readonly conversationStore = inject(ConversationsStore);
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
+  private readonly chatNavigationService = inject(ChatNavigationService);
   private readonly inputDiv =
     viewChild.required<ElementRef<HTMLDivElement>>('inputDiv');
 
@@ -56,10 +58,12 @@ export class ChatInputComponent {
 
     if (!id) {
       this.conversationStore
-        .createInitialConversation()
+        .createInitialConversation(text)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (conversation) => {
+            // Mark this conversation as newly created so it doesn't load history
+            this.chatNavigationService.markConversationAsNew(conversation.id);
             this.router.navigate(['/chat', conversation.id]).then(() => {
               this.messagesStore.addMessage(text, conversation.id);
             });

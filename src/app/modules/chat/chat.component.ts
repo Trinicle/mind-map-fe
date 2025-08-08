@@ -20,6 +20,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChatService } from './chat.service';
 import { MessagesStore } from './chat-store';
 import { ConversationsStore } from './conversations/conversations-store';
+import { ChatNavigationService } from './chat-navigation.service';
 
 @Component({
   selector: 'app-chat',
@@ -38,6 +39,7 @@ export class ChatComponent implements OnInit {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private messagesStore = inject(MessagesStore);
+  private chatNavigationService = inject(ChatNavigationService);
   readonly inNewChat = signal<boolean>(true);
 
   ngOnInit(): void {
@@ -54,7 +56,15 @@ export class ChatComponent implements OnInit {
           this.inNewChat.set(true);
         } else {
           this.inNewChat.set(false);
-          this.messagesStore.loadMessages(urls[2]);
+          const conversationId = urls[2];
+
+          // Only load messages if this conversation wasn't just created
+          if (!this.chatNavigationService.isNewlyCreated(conversationId)) {
+            this.messagesStore.loadMessages(conversationId);
+          } else {
+            // Remove from newly created set after first navigation
+            this.chatNavigationService.removeFromNewlyCreated(conversationId);
+          }
         }
       });
   }

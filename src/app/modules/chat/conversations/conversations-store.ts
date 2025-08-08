@@ -66,12 +66,12 @@ export const ConversationsStore = signalStore(
         })
       );
     },
-    createInitialConversation(transcriptId?: string) {
+    createInitialConversation(query: string, transcriptId?: string) {
       patchState(store, {
         isLoading: true,
       });
 
-      return chatService.createConversation(transcriptId).pipe(
+      return chatService.createConversation(query, transcriptId).pipe(
         map((conversation) => {
           patchState(
             store,

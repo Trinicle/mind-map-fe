@@ -9,6 +9,7 @@ import {
 } from '@ngrx/signals';
 import {
   addEntity,
+  removeAllEntities,
   setAllEntities,
   updateEntity,
   withEntities,
@@ -103,6 +104,9 @@ export const MessagesStore = signalStore(
           })
         )
         .subscribe();
+    },
+    clearMessages() {
+      patchState(store, removeAllEntities());
     },
   }))
 );

@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
+import { MessagesStore } from '../chat-store';
 
 @Component({
   selector: 'app-new-chat',
@@ -8,4 +14,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './new-chat.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewChatComponent {}
+export class NewChatComponent implements OnInit {
+  private readonly messagesStore = inject(MessagesStore);
+
+  ngOnInit(): void {
+    this.messagesStore.clearMessages();
+  }
+}

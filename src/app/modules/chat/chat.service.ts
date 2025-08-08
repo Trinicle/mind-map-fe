@@ -8,6 +8,7 @@ import { Conversation } from './conversations/conversations-store';
 import { Message, MessageType } from './chat-store';
 
 interface ConversationCreateRequest {
+  query: string;
   transcript_id?: string;
 }
 
@@ -79,8 +80,9 @@ export class ChatService {
       );
   }
 
-  createConversation(transcriptId?: string) {
+  createConversation(query: string, transcriptId?: string) {
     const request: ConversationCreateRequest = {
+      query: query,
       transcript_id: transcriptId,
     };
     return this.http
