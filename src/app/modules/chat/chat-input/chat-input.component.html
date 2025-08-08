@@ -1,8 +1,8 @@
 <div class="bg-base-100 rounded-3xl p-4 w-[48rem]">
   <div
     #inputDiv
-    contenteditable="true"
-    class="max-h-72 overflow-y-auto hover:outline-none focus:outline-none px-1.5 dark:before:text-slate-400 before:text-slate-500"
+    contenteditable="plaintext-only"
+    class="min-h-[1.5rem] max-h-[30vh] overflow-auto hover:outline-none focus:outline-none px-1.5 dark:before:text-slate-400 before:text-slate-500 resize-none"
     placeholder="Ask anything regarding a transcript..."
     (input)="onInput($event)"
     (keydown.enter)="onSubmit($event)"

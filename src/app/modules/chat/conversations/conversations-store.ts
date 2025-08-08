@@ -67,10 +67,6 @@ export const ConversationsStore = signalStore(
       );
     },
     createInitialConversation(query: string, transcriptId?: string) {
-      patchState(store, {
-        isLoading: true,
-      });
-
       return chatService.createConversation(query, transcriptId).pipe(
         map((conversation) => {
           patchState(
@@ -80,11 +76,6 @@ export const ConversationsStore = signalStore(
             })
           );
           return conversation;
-        }),
-        finalize(() => {
-          patchState(store, {
-            isLoading: false,
-          });
         })
       );
     },

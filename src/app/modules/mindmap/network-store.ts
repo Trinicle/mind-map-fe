@@ -106,7 +106,6 @@ export const NetworkStore = signalStore(
                 selectId: (topic) => topic.id,
               })
             );
-            console.log('onInit');
             store.setNetworkData();
           }),
           finalize(() => {

@@ -46,7 +46,6 @@ export class ChatInputComponent {
       div.innerHTML = '';
       return;
     }
-    const text = div.innerText;
   }
 
   onSubmit(event: Event | undefined = undefined) {

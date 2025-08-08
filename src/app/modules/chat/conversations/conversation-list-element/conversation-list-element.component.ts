@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Conversation } from '../conversations-store';
 import { RouterLink } from '@angular/router';
 
@@ -7,6 +7,7 @@ import { RouterLink } from '@angular/router';
   imports: [RouterLink],
   templateUrl: './conversation-list-element.component.html',
   styleUrl: './conversation-list-element.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConversationListElementComponent {
   readonly conversation = input.required<Conversation>();

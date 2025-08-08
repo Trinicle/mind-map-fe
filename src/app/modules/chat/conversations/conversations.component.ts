@@ -1,4 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import {
   tdesignArrowLeft,
@@ -19,7 +25,6 @@ import { Router } from '@angular/router';
     ConversationListElementComponent,
   ],
   providers: [
-    ConversationsStore,
     provideIcons({
       tdesignArrowLeft,
       tdesignArrowRight,
@@ -29,6 +34,7 @@ import { Router } from '@angular/router';
   ],
   templateUrl: './conversations.component.html',
   styleUrl: './conversations.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConversationsComponent {
   protected readonly conversationsStore = inject(ConversationsStore);
