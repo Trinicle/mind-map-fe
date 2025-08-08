@@ -123,9 +123,9 @@ export class ChatService {
             message: sentMessage.message,
           };
           const aiMessageMapped: Message = {
-            id: sentMessage.id,
-            type: sentMessage.type,
-            message: sentMessage.message,
+            id: aiMessage.id,
+            type: aiMessage.type,
+            message: aiMessage.message,
           };
           return [sentMessageMapped, aiMessageMapped];
         }),

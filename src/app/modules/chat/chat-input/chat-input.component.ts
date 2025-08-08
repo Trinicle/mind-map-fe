@@ -71,5 +71,7 @@ export class ChatInputComponent {
     } else {
       this.messagesStore.addMessage(text, id);
     }
+
+    this.inputDiv().nativeElement.innerText = '';
   }
 }

@@ -10,12 +10,12 @@ import { ConversationsComponent } from './conversations/conversations.component'
 import {
   RouterOutlet,
   Router,
-  ActivatedRoute,
   NavigationEnd,
+  ActivatedRoute,
 } from '@angular/router';
 import { ChatInputComponent } from './chat-input/chat-input.component';
 import { CommonModule } from '@angular/common';
-import { filter, map } from 'rxjs';
+import { filter, map, startWith } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChatService } from './chat.service';
 import { MessagesStore } from './chat-store';
@@ -37,7 +37,7 @@ import { ConversationsStore } from './conversations/conversations-store';
 export class ChatComponent implements OnInit {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
-
+  private messagesStore = inject(MessagesStore);
   readonly inNewChat = signal<boolean>(true);
 
   ngOnInit(): void {
@@ -45,11 +45,17 @@ export class ChatComponent implements OnInit {
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         filter((event) => event instanceof NavigationEnd),
-        map((event) => event.url)
+        map((event) => event.url),
+        startWith(this.router.url)
       )
       .subscribe((url) => {
         const urls = url.split('/');
-        this.inNewChat.set(urls.length === 2);
+        if (urls.length === 2) {
+          this.inNewChat.set(true);
+        } else {
+          this.inNewChat.set(false);
+          this.messagesStore.loadMessages(urls[2]);
+        }
       });
   }
 }

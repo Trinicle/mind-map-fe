@@ -13,9 +13,9 @@ import {
   updateEntity,
   withEntities,
 } from '@ngrx/signals/entities';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ChatService } from './chat.service';
-import { finalize, map } from 'rxjs';
+import { filter, finalize, map } from 'rxjs';
 
 export type MessageType = 'system' | 'ai' | 'human' | 'tool';
 
@@ -33,10 +33,8 @@ export const MessagesStore = signalStore(
   }),
   withProps(() => ({
     chatService: inject(ChatService),
-    route: inject(ActivatedRoute),
   })),
-
-  withMethods(({ chatService, route, ...store }) => ({
+  withMethods(({ chatService, ...store }) => ({
     addMessage(message: string, conversationId: string) {
       const humanMessage: Message = {
         id: 'temporary-id',
@@ -105,15 +103,6 @@ export const MessagesStore = signalStore(
           })
         )
         .subscribe();
-    },
-  })),
-  withHooks(({ chatService, route, ...store }) => ({
-    onInit() {
-      const conversationId = route.snapshot.params['id'];
-
-      if (!conversationId) return;
-
-      store.loadMessages(conversationId);
     },
   }))
 );
