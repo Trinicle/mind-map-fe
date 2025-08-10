@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ToastService } from '../../core/toast/toast.service';
-import { Observable, map, catchError, throwError, of } from 'rxjs';
+import { Observable, map, catchError, throwError, of, switchMap } from 'rxjs';
 import { getApiUrl, Response } from '../../shared/api/route';
 import { ApiError } from '../../shared/types/api.types';
 import { Conversation } from './conversations/conversations-store';
@@ -61,17 +61,17 @@ export class ChatService {
   getConversationHistory(conversationId: string): Observable<Message[]> {
     return this.http
       .get<MessagePythonResponseList>(
-        getApiUrl(`/conversations/${conversationId}/history`)
+        getApiUrl(`/conversations/${conversationId}`)
       )
       .pipe(
-        map((response) => {
+        switchMap((response) => {
           const data = response.data;
           const messages: Message[] = data.map((message) => ({
             id: message.id,
             type: message.type,
             message: message.message,
           }));
-          return messages;
+          return of(messages);
         }),
         catchError((error: ApiError) => {
           this.toast.show(error.message);
@@ -106,7 +106,6 @@ export class ChatService {
         })
       );
   }
-
   sendMessage(conversationId: string, text: string) {
     const request: MessageCreateRequest = {
       conversation_id: conversationId,

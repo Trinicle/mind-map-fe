@@ -14,7 +14,9 @@
           class="absolute bottom-4 left-1/2 transform -translate-x-1/2 transition-all duration-300 ease-in-out"
           [class.top-[40vh]]="inNewChat()"
         >
-          <app-chat-input />
+          <app-chat-input
+            (newlyCreatedConversation)="isNewlyCreated.set($event)"
+          />
         </div>
       </div>
     </div>
