@@ -1,22 +1,57 @@
 <div class="bg-base-100 h-full">
   @if (!isLoading()) {
-    <div class="p-6 flex flex-col gap-4 h-full">
-      <div>
-        <h1 class="text-4xl font-bold">{{ title() }}</h1>
-      </div>
-      <div class="flex gap-2 overflow-x-scroll no-scrollbar h-8">
-        @for (tag of tags(); track tag) {
-          <div class="badge badge-primary">{{ tag }}</div>
-        }
-      </div>
-      <div class="min-h-6 max-h-36 overflow-auto">
-        <p>{{ description()}}</p>
-      </div>
-      <div class="h-full">
-        <textarea type="text" class="textarea textarea-bordered w-full h-full bg-base-200" placeholder="Enter your text here...">{{ transcript() }}</textarea>
-      </div>    
+  <div class="p-6 flex flex-col gap-4 h-full">
+    <div>
+      <h1 class="text-4xl font-bold">{{ title() }}</h1>
     </div>
+    <div class="flex gap-2 overflow-x-scroll no-scrollbar min-h-8">
+      @for (tag of tags(); track tag) {
+      <div class="badge badge-primary">{{ tag }}</div>
+      }
+    </div>
+    <div class="min-h-6 max-h-36 overflow-auto">
+      <p>{{ description() }}</p>
+    </div>
+    <div class="collapse collapse-arrow rounded-none">
+      <input
+        type="radio"
+        name="my-accordion-2"
+        class="pl-0"
+        [checked]="showFollowupQuestions()"
+        (click)="onFollowupQuestionsClick()"
+      />
+      <div class="collapse-title font-semibold pl-0">
+        Suggested Followup Questions
+      </div>
+      <div class="collapse-content text-sm pl-0 overflow-auto max-h-72">
+        <ul class="list-disc list-inside">
+          @for (question of questions(); track question) {
+          <li class="mb-1">{{ question.question }}</li>
+          }
+        </ul>
+      </div>
+    </div>
+    <div class="collapse collapse-arrow rounded-none h-full">
+      <input
+        type="radio"
+        name="my-accordion-3"
+        class="pl-0"
+        [checked]="showTranscript()"
+        (click)="onTranscriptClick()"
+      />
+      <div class="collapse-title font-semibold pl-0">Transcript</div>
+      <div class="collapse-content text-sm pl-0">
+        <textarea
+          type="text"
+          name="transcript"
+          class="textarea textarea-bordered w-full h-full bg-base-200"
+          placeholder="Enter your text here..."
+          >{{ transcript() }}
+        </textarea>
+      </div>
+    </div>
+  </div>
   } @else {
-    <app-overview-skeleton />
+  <app-overview-skeleton />
   }
 </div>

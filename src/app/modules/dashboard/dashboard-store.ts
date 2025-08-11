@@ -67,6 +67,9 @@ export const DashboardStore = signalStore(
         .getCards()
         .pipe(
           map((cards: DashboardCard[]) => {
+            cards.forEach((card) => {
+              card.date = new Date(card.date);
+            });
             patchState(
               store,
               setAllEntities<DashboardCard>(cards, {
@@ -108,6 +111,34 @@ export const DashboardStore = signalStore(
         )
         .subscribe();
     },
+    filterCards(request: DashboardCardSearchRequest) {
+      patchState(store, {
+        isLoading: true,
+      });
+
+      dashboardService
+        .getFilteredCards(request)
+        .pipe(
+          map((cards: DashboardCard[]) => {
+            cards.forEach((card) => {
+              card.date = new Date(card.date);
+            });
+            patchState(
+              store,
+              setAllEntities<DashboardCard>(cards, {
+                selectId: (card) => card.id,
+              })
+            );
+          }),
+          finalize(() => {
+            patchState(store, {
+              isLoading: false,
+            });
+          })
+        )
+        .subscribe();
+    },
+
     clearCards() {
       patchState(store, removeAllEntities());
     },

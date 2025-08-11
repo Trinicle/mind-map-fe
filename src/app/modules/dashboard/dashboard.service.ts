@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { getApiUrl, Response } from '../../shared/api/route';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
 import { ApiError } from '../../shared/types/api.types';
 import { ToastService } from '../../core/toast/toast.service';
 import {
@@ -48,16 +48,19 @@ export class DashboardService {
   }
 
   getFilteredCards(request: DashboardCardSearchRequest) {
-    return this.http.get<DashboardResponse>(
-      getApiUrl('/dashboard/mindmap/search'),
-      {
+    return this.http
+      .get<DashboardResponse>(getApiUrl('/dashboard/mindmap/search'), {
         params: {
           title: request.title,
           tags: request.tags,
           date: request.date,
         },
-      }
-    );
+      })
+      .pipe(
+        switchMap((response) => {
+          return of(response.data);
+        })
+      );
   }
 
   createCard(card: DashboardCardPostRequest): Observable<DashboardCard> {

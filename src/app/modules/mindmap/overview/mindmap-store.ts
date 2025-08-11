@@ -1,4 +1,16 @@
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withHooks,
+  withMethods,
+  withProps,
+  withState,
+} from '@ngrx/signals';
+import { setAllEntities, withEntities } from '@ngrx/signals/entities';
+import { inject } from '@angular/core';
+import { OverviewService } from './overview.service';
+import { ActivatedRoute } from '@angular/router';
+import { finalize, map } from 'rxjs';
 
 export interface MindMapDetail {
   id: string;
@@ -22,19 +34,75 @@ const initialState: MindMapDetail = {
 
 export const MindMapStore = signalStore(
   withState(initialState),
-  withMethods((store) => ({
-    setDetail(detail: MindMapDetail) {
-      patchState(store, {
-        ...detail,
-      });
+  withProps(() => ({
+    overviewService: inject(OverviewService),
+    route: inject(ActivatedRoute),
+  })),
+  withHooks(({ route, overviewService, ...store }) => ({
+    onInit() {
+      const id = route.snapshot.params['id'];
+      if (!id) return;
+
+      overviewService
+        .getMap(id)
+        .pipe(
+          map((detail: MindMapDetail) => {
+            patchState(store, {
+              ...detail,
+            });
+          }),
+          finalize(() => {
+            patchState(store, {
+              isLoading: false,
+            });
+          })
+        )
+        .subscribe();
     },
-    clearDetail() {
+  }))
+);
+
+export interface Question {
+  id: string;
+  question: string;
+}
+
+export const QuestionStore = signalStore(
+  withEntities<Question>(),
+  withState({
+    isLoading: false,
+  }),
+  withProps(() => ({
+    overviewService: inject(OverviewService),
+    route: inject(ActivatedRoute),
+  })),
+  withHooks(({ route, overviewService, ...store }) => ({
+    onInit() {
+      const id = route.snapshot.params['id'];
+      if (!id) return;
+
       patchState(store, {
-        ...initialState,
+        isLoading: true,
       });
-    },
-    setIsLoading(isLoading: boolean) {
-      patchState(store, { isLoading });
+
+      overviewService
+        .getQuestions(id)
+        .pipe(
+          map((questions: Question[]) => {
+            patchState(
+              store,
+              setAllEntities<Question>(questions, {
+                selectId: (question) => question.id,
+              })
+            );
+          }),
+          finalize(() => {
+            patchState(store, {
+              isLoading: false,
+            });
+          })
+        )
+        .subscribe();
     },
   }))
 );

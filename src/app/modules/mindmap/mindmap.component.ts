@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { OverviewComponent } from './overview/overview.component';
 import { RouterOutlet } from '@angular/router';
 import { NetworkStore } from './network-store';
@@ -12,6 +12,4 @@ import { NetworkService } from './network.service';
   styleUrl: './mindmap.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MindMapComponent implements OnInit {
-  ngOnInit(): void {}
-}
+export class MindMapComponent {}

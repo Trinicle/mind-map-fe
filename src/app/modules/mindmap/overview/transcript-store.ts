@@ -1,4 +1,15 @@
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import {
+  patchState,
+  signalStore,
+  withHooks,
+  withMethods,
+  withProps,
+  withState,
+} from '@ngrx/signals';
+import { OverviewService } from './overview.service';
+import { finalize, map } from 'rxjs';
 
 export interface MindMapTranscript {
   id: string;
@@ -14,19 +25,34 @@ const initialState: MindMapTranscript = {
 
 export const TranscriptStore = signalStore(
   withState(initialState),
-  withMethods((store) => ({
-    setTranscript(transcript: MindMapTranscript) {
+  withProps(() => ({
+    overviewService: inject(OverviewService),
+    route: inject(ActivatedRoute),
+  })),
+  withHooks(({ route, overviewService, ...store }) => ({
+    onInit() {
+      const id = route.snapshot.params['id'];
+      if (!id) return;
+
       patchState(store, {
-        ...transcript,
+        isLoading: true,
       });
-    },
-    setIsLoading(isLoading: boolean) {
-      patchState(store, { isLoading });
-    },
-    clearTranscript() {
-      patchState(store, {
-        ...initialState,
-      });
+
+      overviewService
+        .getTranscript(id)
+        .pipe(
+          map((transcript: MindMapTranscript) => {
+            patchState(store, {
+              ...transcript,
+            });
+          }),
+          finalize(() => {
+            patchState(store, {
+              isLoading: false,
+            });
+          })
+        )
+        .subscribe();
     },
   }))
 );

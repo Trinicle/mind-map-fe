@@ -1,0 +1,5 @@
+@reference "tailwindcss";
+
+.collapse-content {
+  min-height: 0 !important;
+}

@@ -10,7 +10,11 @@ import {
   viewChild,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { DashboardCardSearchRequest, DashboardTags } from '../dashboard-store';
+import {
+  DashboardCardSearchRequest,
+  DashboardStore,
+  DashboardTags,
+} from '../dashboard-store';
 import { CommonModule } from '@angular/common';
 import { DashboardService } from '../dashboard.service';
 
@@ -22,8 +26,9 @@ import { DashboardService } from '../dashboard.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardSearchComponent implements OnInit {
-  readonly dashboardService = inject(DashboardService);
-  readonly dropdown = viewChild<ElementRef<HTMLDivElement>>('dropdown');
+  private readonly dashboardService = inject(DashboardService);
+  private readonly dashboardStore = inject(DashboardStore);
+  private readonly dropdown = viewChild<ElementRef<HTMLDivElement>>('dropdown');
   readonly tagFilter = signal<string>('');
   readonly form = new FormGroup({
     title: new FormControl<string>(''),
@@ -55,7 +60,7 @@ export class DashboardSearchComponent implements OnInit {
       date: date ?? '',
     };
 
-    // this.dashboardService.getFilteredCards(request);
+    this.dashboardStore.filterCards(request);
   }
 
   onInputChange(event: Event) {
@@ -78,7 +83,7 @@ export class DashboardSearchComponent implements OnInit {
       activeTags?.splice(activeTags.indexOf(tag.name), 1);
     }
 
-    console.log(this.form.value.activeTags);
+    this.onBlur();
   }
 
   @HostListener('document:click', ['$event'])

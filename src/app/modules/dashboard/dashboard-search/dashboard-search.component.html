@@ -8,7 +8,7 @@
         type="text"
         class="input w-full"
         formControlName="title"
-        (blur)="onBlur()"
+        (keydown.enter)="onBlur()"
       />
     </fieldset>
 
@@ -26,19 +26,22 @@
           placeholder="Select a tag"
           formControlName="activeTags"
           (focus)="onFocus()"
-          (blur)="onBlur()"
           (input)="onInputChange($event)"
         />
 
         <ul
-          class="dropdown-content z-[1] menu flex-nowrap p-2 shadow bg-base-300 rounded-box w-full max-h-60 overflow-y-scroll mt-1"
+          class="dropdown-content z-[1] menu flex-nowrap p-2 shadow bg-base-300 rounded-box w-full max-h-60 overflow-y-auto mt-1"
         >
           @if (filteredTags().length === 0) {
           <li class="px-3 py-1.5">No tags found</li>
           } @else { @if (filteredTags().length > 1) {
           <li>
             <label class="label text-base-content">
-              <input type="checkbox" class="checkbox checkbox-primary" />
+              <input
+                type="checkbox"
+                class="checkbox checkbox-primary"
+                (click)="onBlur()"
+              />
               Clear all
             </label>
           </li>
@@ -65,7 +68,7 @@
         type="date"
         class="input w-full"
         formControlName="date"
-        (blur)="onBlur()"
+        (keydown.enter)="onBlur()"
       />
     </fieldset>
   </form>

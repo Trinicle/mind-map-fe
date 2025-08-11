@@ -1,33 +1,24 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { QuestionStore, TopicStore } from './topic-store';
+import { TopicStore } from './topic-store';
+import { TopicService } from './topic.service';
 
 @Component({
   selector: 'app-topic',
   imports: [],
-  providers: [QuestionStore, TopicStore],
+  providers: [TopicStore, TopicService],
   templateUrl: './topic.component.html',
   styleUrl: './topic.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TopicComponent implements OnInit {
+export class TopicComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly topicStore = inject(TopicStore);
-  private readonly questionStore = inject(QuestionStore);
 
-  title = this.topicStore.topic.title;
-  isLoading = this.questionStore.isLoading;
-  questions = this.questionStore.entities;
-
-  ngOnInit(): void {
-    console.log(this.isLoading(), this.topicStore.topic());
-  }
+  title = this.topicStore.title;
+  isLoading = this.topicStore.isLoading;
+  content = this.topicStore.content;
 
   onClose() {
     this.router.navigate(['network'], { relativeTo: this.route.parent });
