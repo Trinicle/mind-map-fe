@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -24,14 +25,18 @@ export class OverviewComponent {
   private readonly questionStore = inject(QuestionStore);
   readonly showFollowupQuestions = signal(false);
   readonly showTranscript = signal(false);
-
+  readonly isLoading = computed(
+    () =>
+      this.mindMapStore.isLoading() ||
+      this.questionStore.isLoading() ||
+      this.transcriptStore.isLoading()
+  );
   title = this.mindMapStore.title;
   transcript = this.transcriptStore.text;
   participants = this.mindMapStore.participants;
   description = this.mindMapStore.description;
   date = this.mindMapStore.date;
   tags = this.mindMapStore.tags;
-  isLoading = this.mindMapStore.isLoading;
   questions = this.questionStore.entities;
 
   onFollowupQuestionsClick() {
